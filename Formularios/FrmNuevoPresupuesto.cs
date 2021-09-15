@@ -8,17 +8,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinFormCarpinteria.AccesoDatos;
+using WinFormCarpinteria.Servicios;
 
 namespace WinFormCarpinteria.Formularios
 {
 	public partial class FrmNuevoPresupuesto : Form
 	{
-		Presupuesto nuevoPresupuesto;
+		private Presupuesto nuevoPresupuesto;
+		private GestorPresupuesto gestor;
+
 		EdicionPresupuesto oEdicion;
 		public FrmNuevoPresupuesto()
 		{
 			InitializeComponent();
 			nuevoPresupuesto = new Presupuesto();
+			gestor = new GestorPresupuesto(new DaoFactory());
 		}
 
 		public enum EdicionPresupuesto
@@ -31,7 +36,7 @@ namespace WinFormCarpinteria.Formularios
 		{
 			if (oEdicion==EdicionPresupuesto.EdicionNoActiva)
 			{
-				lblNroPresupuesto.Text += ProximoPresupuesto();
+				lblNroPresupuesto.Text += gestor.ProximoPresupuesto();
 				CargarProductos();
 				txtFecha.Text = DateTime.Today.ToString("dd/MM/yyyy");
 				txtCliente.Text = "Consumidor Final";
@@ -43,38 +48,11 @@ namespace WinFormCarpinteria.Formularios
 
 		private void CargarProductos()
 		{
-			SqlConnection cnn = new SqlConnection();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			SqlCommand cmd = new SqlCommand();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_CONSULTAR_PRODUCTOS";
-			DataTable tabla = new DataTable();
-			tabla.Load(cmd.ExecuteReader());
-			cnn.Close();
+			DataTable tabla = gestor.ObtenerProductos();
 
 			cboProducto.DataSource = tabla;
-			cboProducto.ValueMember = "id_producto";
-			cboProducto.DisplayMember = "n_producto";
-		}
-
-		private int ProximoPresupuesto()
-		{
-			SqlConnection cnn = new SqlConnection();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			SqlCommand cmd = new SqlCommand();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_PROXIMO_ID";
-			SqlParameter param = new SqlParameter("@next",SqlDbType.Int);
-			param.Direction = ParameterDirection.Output;
-			cmd.Parameters.Add(param);
-			cmd.ExecuteNonQuery();
-			cnn.Close();
-			
-			return (int)param.Value;
+			cboProducto.ValueMember = tabla.Columns[0].ColumnName;
+			cboProducto.DisplayMember =tabla.Columns[1].ColumnName;
 		}
 
 		private void btnAgregar_Click(object sender, EventArgs e)
@@ -160,7 +138,7 @@ namespace WinFormCarpinteria.Formularios
 			nuevoPresupuesto.Descuento = double.Parse(txtDescuento.Text);
 			nuevoPresupuesto.Total = Convert.ToDouble(txtTotal.Text);
 			
-			if (nuevoPresupuesto.Confirmar())
+			if (gestor.ConfirmarPresupuesto(nuevoPresupuesto))
 			{
 				MessageBox.Show("Presupuesto registrado con exito.", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				Dispose();

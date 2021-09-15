@@ -43,67 +43,6 @@ namespace WinFormCarpinteria
 			return total;
 		}
 
-		public bool Confirmar()
-		{
-			//aca confirmo la operacion sql
-			bool resultado = true;
-		
-			SqlConnection cnn = new SqlConnection();
-			SqlTransaction trans = null;
-
-			try
-			{
-				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-				cnn.Open();
-				trans = cnn.BeginTransaction();
-				SqlCommand cmd = new SqlCommand();
-				cmd.Connection = cnn;
-				cmd.Transaction = trans;
-				cmd.CommandText = "SP_INSERTAR_MAESTRO";
-				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.Parameters.AddWithValue("@cliente", this.Cliente);
-				cmd.Parameters.AddWithValue("@dto", this.Descuento);
-				cmd.Parameters.AddWithValue("@total", this.Total);
-				SqlParameter parameter = new SqlParameter("@presupuesto_nro", SqlDbType.Int);
-				parameter.Direction = ParameterDirection.Output;
-				cmd.Parameters.Add(parameter);
-				cmd.ExecuteNonQuery();
-
-				this.PresupuestoNro = Convert.ToInt32(parameter.Value);
-				int detalleNro = 1;
-
-				foreach (DetallePresupuesto item in Detalles)
-				{
-					SqlCommand cmdDet = new SqlCommand();
-					cmdDet.Connection = cnn;
-					cmdDet.Transaction = trans;
-					cmdDet.CommandText = "SP_INSERTAR_DETALLE";
-					cmdDet.CommandType = CommandType.StoredProcedure;
-					cmdDet.Parameters.AddWithValue("@presupuesto_nro", this.PresupuestoNro);
-					cmdDet.Parameters.AddWithValue("@detalle", detalleNro);
-					cmdDet.Parameters.AddWithValue("@id_producto",item.Producto.IdProducto);
-					cmdDet.Parameters.AddWithValue("@cantidad", item.Cantidad);
-					cmdDet.ExecuteNonQuery();
-					detalleNro++;
-				}
-
-				trans.Commit();
-			}
-			catch (Exception)
-			{
-				//en caso que quiera saber que error ocurre
-				//MessageBox.Show("error: " + E.Message);
-				trans.Rollback();
-				resultado=false;
-			}
-			finally
-			{
-				if (cnn != null && cnn.State == ConnectionState.Open ) cnn.Close();
-			}
-
-			return resultado;
-		}
-
 		public bool Borrar(int nroPresupuesto)
 		{
 			bool resultado = true;
