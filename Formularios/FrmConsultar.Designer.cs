@@ -44,6 +44,9 @@ namespace WinFormCarpinteria.Formularios
 			this.btnEliminarFiltro = new System.Windows.Forms.Button();
 			this.dtpFechaDesde = new System.Windows.Forms.DateTimePicker();
 			this.dtpFechaHasta = new System.Windows.Forms.DateTimePicker();
+			this.btnNuevoP = new System.Windows.Forms.Button();
+			this.lblFechaDesde = new System.Windows.Forms.Label();
+			this.lblFechaHasta = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.dgvConsultar)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -59,12 +62,12 @@ namespace WinFormCarpinteria.Formularios
             this.cTotal,
             this.cAccion,
             this.cAccion2});
-			this.dgvConsultar.Location = new System.Drawing.Point(12, 106);
+			this.dgvConsultar.Location = new System.Drawing.Point(12, 137);
 			this.dgvConsultar.Name = "dgvConsultar";
 			this.dgvConsultar.ReadOnly = true;
 			this.dgvConsultar.RowHeadersVisible = false;
 			this.dgvConsultar.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dgvConsultar.Size = new System.Drawing.Size(544, 426);
+			this.dgvConsultar.Size = new System.Drawing.Size(544, 429);
 			this.dgvConsultar.TabIndex = 0;
 			this.dgvConsultar.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvConsultar_CellContentClick);
 			// 
@@ -114,9 +117,9 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			// btnCancelar
 			// 
-			this.btnCancelar.Location = new System.Drawing.Point(482, 538);
+			this.btnCancelar.Location = new System.Drawing.Point(482, 569);
 			this.btnCancelar.Name = "btnCancelar";
-			this.btnCancelar.Size = new System.Drawing.Size(75, 23);
+			this.btnCancelar.Size = new System.Drawing.Size(75, 26);
 			this.btnCancelar.TabIndex = 1;
 			this.btnCancelar.Text = "Cancelar";
 			this.btnCancelar.UseVisualStyleBackColor = true;
@@ -125,7 +128,7 @@ namespace WinFormCarpinteria.Formularios
 			// lblFiltro
 			// 
 			this.lblFiltro.AutoSize = true;
-			this.lblFiltro.Location = new System.Drawing.Point(46, 27);
+			this.lblFiltro.Location = new System.Drawing.Point(12, 29);
 			this.lblFiltro.Name = "lblFiltro";
 			this.lblFiltro.Size = new System.Drawing.Size(34, 13);
 			this.lblFiltro.TabIndex = 2;
@@ -135,22 +138,22 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			this.cboFiltro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboFiltro.FormattingEnabled = true;
-			this.cboFiltro.Location = new System.Drawing.Point(102, 23);
+			this.cboFiltro.Location = new System.Drawing.Point(67, 25);
 			this.cboFiltro.Name = "cboFiltro";
-			this.cboFiltro.Size = new System.Drawing.Size(144, 21);
+			this.cboFiltro.Size = new System.Drawing.Size(226, 21);
 			this.cboFiltro.TabIndex = 3;
 			this.cboFiltro.SelectedIndexChanged += new System.EventHandler(this.cboFiltro_SelectedIndexChanged);
 			// 
 			// txtFiltro
 			// 
-			this.txtFiltro.Location = new System.Drawing.Point(256, 23);
+			this.txtFiltro.Location = new System.Drawing.Point(299, 25);
 			this.txtFiltro.Name = "txtFiltro";
 			this.txtFiltro.Size = new System.Drawing.Size(176, 20);
 			this.txtFiltro.TabIndex = 4;
 			// 
 			// btnFiltrar
 			// 
-			this.btnFiltrar.Location = new System.Drawing.Point(442, 22);
+			this.btnFiltrar.Location = new System.Drawing.Point(481, 24);
 			this.btnFiltrar.Name = "btnFiltrar";
 			this.btnFiltrar.Size = new System.Drawing.Size(75, 23);
 			this.btnFiltrar.TabIndex = 5;
@@ -160,7 +163,7 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			// btnEliminarFiltro
 			// 
-			this.btnEliminarFiltro.Location = new System.Drawing.Point(12, 538);
+			this.btnEliminarFiltro.Location = new System.Drawing.Point(12, 572);
 			this.btnEliminarFiltro.Name = "btnEliminarFiltro";
 			this.btnEliminarFiltro.Size = new System.Drawing.Size(105, 23);
 			this.btnEliminarFiltro.TabIndex = 6;
@@ -170,23 +173,53 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			// dtpFechaDesde
 			// 
-			this.dtpFechaDesde.Location = new System.Drawing.Point(102, 68);
+			this.dtpFechaDesde.Location = new System.Drawing.Point(67, 64);
 			this.dtpFechaDesde.Name = "dtpFechaDesde";
 			this.dtpFechaDesde.Size = new System.Drawing.Size(200, 20);
 			this.dtpFechaDesde.TabIndex = 7;
 			// 
 			// dtpFechaHasta
 			// 
-			this.dtpFechaHasta.Location = new System.Drawing.Point(318, 68);
+			this.dtpFechaHasta.Location = new System.Drawing.Point(356, 64);
 			this.dtpFechaHasta.Name = "dtpFechaHasta";
 			this.dtpFechaHasta.Size = new System.Drawing.Size(200, 20);
 			this.dtpFechaHasta.TabIndex = 8;
+			// 
+			// btnNuevoP
+			// 
+			this.btnNuevoP.Location = new System.Drawing.Point(15, 108);
+			this.btnNuevoP.Name = "btnNuevoP";
+			this.btnNuevoP.Size = new System.Drawing.Size(122, 23);
+			this.btnNuevoP.TabIndex = 9;
+			this.btnNuevoP.Text = "Nuevo Presupuesto";
+			this.btnNuevoP.UseVisualStyleBackColor = true;
+			// 
+			// lblFechaDesde
+			// 
+			this.lblFechaDesde.AutoSize = true;
+			this.lblFechaDesde.Location = new System.Drawing.Point(17, 68);
+			this.lblFechaDesde.Name = "lblFechaDesde";
+			this.lblFechaDesde.Size = new System.Drawing.Size(44, 13);
+			this.lblFechaDesde.TabIndex = 10;
+			this.lblFechaDesde.Text = "Desde: ";
+			// 
+			// lblFechaHasta
+			// 
+			this.lblFechaHasta.AutoSize = true;
+			this.lblFechaHasta.Location = new System.Drawing.Point(306, 68);
+			this.lblFechaHasta.Name = "lblFechaHasta";
+			this.lblFechaHasta.Size = new System.Drawing.Size(41, 13);
+			this.lblFechaHasta.TabIndex = 11;
+			this.lblFechaHasta.Text = "Hasta: ";
 			// 
 			// FrmConsultar
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(569, 575);
+			this.ClientSize = new System.Drawing.Size(569, 612);
+			this.Controls.Add(this.lblFechaHasta);
+			this.Controls.Add(this.lblFechaDesde);
+			this.Controls.Add(this.btnNuevoP);
 			this.Controls.Add(this.dtpFechaHasta);
 			this.Controls.Add(this.dtpFechaDesde);
 			this.Controls.Add(this.btnEliminarFiltro);
@@ -223,5 +256,8 @@ namespace WinFormCarpinteria.Formularios
 		private System.Windows.Forms.Button btnEliminarFiltro;
 		private System.Windows.Forms.DateTimePicker dtpFechaDesde;
 		private System.Windows.Forms.DateTimePicker dtpFechaHasta;
+		private System.Windows.Forms.Button btnNuevoP;
+		private System.Windows.Forms.Label lblFechaDesde;
+		private System.Windows.Forms.Label lblFechaHasta;
 	}
 }
