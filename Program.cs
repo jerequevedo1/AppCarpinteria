@@ -16,10 +16,10 @@ namespace WinFormCarpinteria
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			//Application.Run(new Formularios.FrmPrincipal());
+			Application.Run(new Formularios.FrmPrincipal());
 			//Application.Run(new Formularios.FrmReporteProductos());
 			//Application.Run(new Formularios.FrmNuevoPresupuesto());
-			Application.Run(new Formularios.FrmConsultar());
+			//Application.Run(new Formularios.FrmConsultar());
 		}
 	}
 }
