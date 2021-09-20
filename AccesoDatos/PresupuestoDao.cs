@@ -72,17 +72,25 @@ namespace WinFormCarpinteria.AccesoDatos
 
 		public DataTable ListarProductos()
 		{
-			SqlConnection cnn = new SqlConnection();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			SqlCommand cmd = new SqlCommand();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_CONSULTAR_PRODUCTOS";
-			DataTable tabla = new DataTable();
-			tabla.Load(cmd.ExecuteReader());
-			cnn.Close();
-
+			DataTable tabla;
+			try
+			{
+				SqlConnection cnn = new SqlConnection();
+				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+				cnn.Open();
+				SqlCommand cmd = new SqlCommand();
+				cmd.Connection = cnn;
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.CommandText = "SP_CONSULTAR_PRODUCTOS";
+				tabla = new DataTable();
+				tabla.Load(cmd.ExecuteReader());
+				cnn.Close();
+			}
+			catch (Exception)
+			{
+				tabla=null;
+			}
+			
 			return tabla;
 		}
 
