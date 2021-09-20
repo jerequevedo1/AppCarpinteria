@@ -88,20 +88,31 @@ namespace WinFormCarpinteria.AccesoDatos
 
 		public int ObtenerProximoNumero()
 		{
-			SqlConnection cnn = new SqlConnection();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			SqlCommand cmd = new SqlCommand();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_PROXIMO_ID";
-			SqlParameter param = new SqlParameter("@next", SqlDbType.Int);
-			param.Direction = ParameterDirection.Output;
-			cmd.Parameters.Add(param);
-			cmd.ExecuteNonQuery();
-			cnn.Close();
+			int nro = 0;
 
-			return (int)param.Value;
+			try
+			{
+				SqlConnection cnn = new SqlConnection();
+				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+				cnn.Open();
+				SqlCommand cmd = new SqlCommand();
+				cmd.Connection = cnn;
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.CommandText = "SP_PROXIMO_ID";
+				SqlParameter param = new SqlParameter("@next", SqlDbType.Int);
+				param.Direction = ParameterDirection.Output;
+				cmd.Parameters.Add(param);
+				cmd.ExecuteNonQuery();
+				cnn.Close();
+
+				nro = (int)param.Value;
+			}
+			catch (Exception)
+			{
+				nro = -1;
+			}
+
+			return nro;
 		}
 	}
 }
