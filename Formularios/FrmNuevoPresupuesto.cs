@@ -50,9 +50,13 @@ namespace WinFormCarpinteria.Formularios
 		{
 			DataTable tabla = gestor.ObtenerProductos();
 
-			cboProducto.DataSource = tabla;
-			cboProducto.ValueMember = tabla.Columns[0].ColumnName;
-			cboProducto.DisplayMember =tabla.Columns[1].ColumnName;
+			if (tabla !=null)
+			{
+				cboProducto.DataSource = tabla;
+				cboProducto.ValueMember = tabla.Columns[0].ColumnName;
+				cboProducto.DisplayMember = tabla.Columns[1].ColumnName;
+			}
+			
 		}
 
 		private void btnAgregar_Click(object sender, EventArgs e)
