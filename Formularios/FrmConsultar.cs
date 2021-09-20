@@ -8,16 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinFormCarpinteria.AccesoDatos;
 using WinFormCarpinteria.Formularios;
+using WinFormCarpinteria.Servicios;
 using static WinFormCarpinteria.Formularios.FrmNuevoPresupuesto;
 
 namespace WinFormCarpinteria.Formularios
 {
 	public partial class FrmConsultar : Form
 	{
+		private GestorPresupuesto gestor;
 		public FrmConsultar()
 		{
 			InitializeComponent();
+			gestor = new GestorPresupuesto(new DaoFactory());
 		}
 
 		private void FrmConsultar_Load(object sender, EventArgs e)
@@ -178,13 +182,12 @@ namespace WinFormCarpinteria.Formularios
 			}
 			if (dgvConsultar.CurrentCell.ColumnIndex == 5)
 			{
-				Presupuesto p = new Presupuesto();
 				int nroPresupuesto =int.Parse( dgvConsultar.CurrentRow.Cells[0].Value.ToString());
 
 				DialogResult dialogResult = MessageBox.Show("Desea borrar este presupuesto?", "Borrar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 				if (dialogResult==DialogResult.Yes)
 				{
-					if (p.Borrar(nroPresupuesto))
+					if (gestor.BorrarPresupuesto(nroPresupuesto))
 					{
 						MessageBox.Show("Presupuesto borrado con exito.", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
 						dgvConsultar.Rows.Clear();

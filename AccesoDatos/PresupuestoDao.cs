@@ -10,7 +10,49 @@ namespace WinFormCarpinteria.AccesoDatos
 {
 	class PresupuestoDao : IPresupuestoDao
 	{
-		public bool Crear(Presupuesto oPresupuesto)
+		public bool BorrarPresupuesto(int nroPresupuesto)
+		{
+			bool resultado = true;
+			SqlConnection cnn = new SqlConnection();
+			SqlTransaction trans = null;
+
+			try
+			{
+				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+				cnn.Open();
+				trans = cnn.BeginTransaction();
+				SqlCommand cmd = new SqlCommand();
+				cmd.Connection = cnn;
+				cmd.Transaction = trans;
+				cmd.CommandText = "SP_BORRAR_DETALLES";
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@nroPresupuesto", nroPresupuesto);
+				cmd.ExecuteNonQuery();
+
+				SqlCommand cmd2 = new SqlCommand();
+				cmd2.Connection = cnn;
+				cmd2.Transaction = trans;
+				cmd2.CommandText = "SP_BORRAR_PRESUPUESTO";
+				cmd2.CommandType = CommandType.StoredProcedure;
+				cmd2.Parameters.AddWithValue("@nroPresupuesto", nroPresupuesto);
+				cmd2.ExecuteNonQuery();
+
+				trans.Commit();
+			}
+			catch (Exception)
+			{
+				trans.Rollback();
+				resultado = false;
+			}
+			finally
+			{
+				if (cnn != null && cnn.State == ConnectionState.Open) cnn.Close();
+			}
+
+			return resultado;
+		}
+
+		public bool CrearPresupuesto(Presupuesto oPresupuesto)
 		{
 			bool resultado = true;
 
@@ -68,6 +110,11 @@ namespace WinFormCarpinteria.AccesoDatos
 			}
 
 			return resultado;
+		}
+
+		public void EditarPresupuesto(int nroPresupuesto)
+		{
+			throw new NotImplementedException();
 		}
 
 		public DataTable ListarProductos()

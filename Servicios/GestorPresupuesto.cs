@@ -30,9 +30,14 @@ namespace WinFormCarpinteria.Servicios
 			return tabla;
 		}
 
-		public bool ConfirmarPresupuesto(Presupuesto oPresupeusto)
+		public bool ConfirmarPresupuesto(Presupuesto oPresupuesto)
 		{
-			return dao.Crear(oPresupeusto);
+			return dao.CrearPresupuesto(oPresupuesto);
+		}
+
+		public bool BorrarPresupuesto(int nroPresupuesto)
+		{
+			return dao.BorrarPresupuesto(nroPresupuesto);
 		}
 	}
 }

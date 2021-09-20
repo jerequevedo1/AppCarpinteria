@@ -166,6 +166,7 @@ namespace WinFormCarpinteria.Formularios
 			lblNroPresupuesto.Text += nroPresupuesto;
 			// traigo datos del presupuesto
 
+
 			SqlConnection cnn = new SqlConnection();
 			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
 			cnn.Open();
