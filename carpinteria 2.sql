@@ -56,14 +56,17 @@ SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_ba
 FROM T_PRESUPUESTOS
 WHERE presupuesto_nro=@nroPresupuesto
 
-CREATE PROCEDURE SP_CONSULTAR_UN_PRESUPUESTO
-@nroPresupuesto int
+CREATE PROCEDURE dbo.SP_CONSULTAR_DETALLES
+@nro_presupuesto int
 AS
-SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
-FROM T_PRESUPUESTOS
-WHERE presupuesto_nro=@nroPresupuesto
+BEGIN
+select detalle_nro,n_producto PRODUCTO,precio PRECIO,cantidad CANTIDAD 
+from T_PRODUCTOS p join T_DETALLES_PRESUPUESTO d on p.id_producto=d.id_producto join T_PRESUPUESTOS pr 
+	on d.presupuesto_nro=pr.presupuesto_nro 
+where pr.presupuesto_nro=@nro_presupuesto
+END
 
-EXEC SP_CONSULTAR_UN_PRESUPUESTO 9
+EXEC SP_CONSULTAR_DETALLES 10
 
 select * from T_DETALLES_PRESUPUESTO
 select * from T_PRESUPUESTOS

@@ -15,14 +15,14 @@ namespace WinFormCarpinteria.Formularios
 {
 	public partial class FrmNuevoPresupuesto : Form
 	{
-		private Presupuesto nuevoPresupuesto;
+		private Presupuesto oPresupuesto;
 		private GestorPresupuesto gestor;
 
 		EdicionPresupuesto oEdicion;
 		public FrmNuevoPresupuesto()
 		{
 			InitializeComponent();
-			nuevoPresupuesto = new Presupuesto();
+			oPresupuesto = new Presupuesto();
 			gestor = new GestorPresupuesto(new DaoFactory());
 		}
 
@@ -89,7 +89,7 @@ namespace WinFormCarpinteria.Formularios
 			Producto p = new Producto(prod, nom, pre);
 			DetallePresupuesto detalle = new DetallePresupuesto(p, cant);
 
-			nuevoPresupuesto.AgregarDetalle(detalle);
+			oPresupuesto.AgregarDetalle(detalle);
 			dgvDetalles.Rows.Add(new object[] { prod, nom, pre, cant });
 
 			CalcularTotales();
@@ -99,16 +99,16 @@ namespace WinFormCarpinteria.Formularios
 		{
 			if (dgvDetalles.CurrentCell.ColumnIndex == 4)
 			{
-				nuevoPresupuesto.QuitarDetalle(dgvDetalles.CurrentRow.Index);
+				oPresupuesto.QuitarDetalle(dgvDetalles.CurrentRow.Index);
 				dgvDetalles.Rows.Remove(dgvDetalles.CurrentRow);
 				CalcularTotales();
 			}
 		}
 		private void CalcularTotales()
 		{
-			txtSubtotal.Text = nuevoPresupuesto.CalcularTotal().ToString();
-			double desc = nuevoPresupuesto.CalcularTotal() * Convert.ToDouble(txtDescuento.Text) / 100;
-			txtTotal.Text = (nuevoPresupuesto.CalcularTotal() - desc).ToString();
+			txtSubtotal.Text = oPresupuesto.CalcularTotal().ToString();
+			double desc = oPresupuesto.CalcularTotal() * Convert.ToDouble(txtDescuento.Text) / 100;
+			txtTotal.Text = (oPresupuesto.CalcularTotal() - desc).ToString();
 		}
 
 		private void btnCancelar_Click(object sender, EventArgs e)
@@ -136,12 +136,12 @@ namespace WinFormCarpinteria.Formularios
 
 		private void GuardarPresupuesto()
 		{
-			nuevoPresupuesto.Fecha = Convert.ToDateTime(txtFecha.Text);
-			nuevoPresupuesto.Cliente = txtCliente.Text;
-			nuevoPresupuesto.Descuento = double.Parse(txtDescuento.Text);
-			nuevoPresupuesto.Total = Convert.ToDouble(txtTotal.Text);
+			oPresupuesto.Fecha = Convert.ToDateTime(txtFecha.Text);
+			oPresupuesto.Cliente = txtCliente.Text;
+			oPresupuesto.Descuento = double.Parse(txtDescuento.Text);
+			oPresupuesto.Total = Convert.ToDouble(txtTotal.Text);
 			
-			if (gestor.ConfirmarPresupuesto(nuevoPresupuesto))
+			if (gestor.ConfirmarPresupuesto(oPresupuesto))
 			{
 				MessageBox.Show("Presupuesto registrado con exito.", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				Dispose();
@@ -160,6 +160,7 @@ namespace WinFormCarpinteria.Formularios
 
 		internal void CargarEdicionPresupuesto(int nroPresupuesto)
 		{
+			Text = "Editar Presupuesto";
 			CargarProductos();
 			cboProducto.DropDownStyle = ComboBoxStyle.DropDownList;
 			lblNroPresupuesto.Text += nroPresupuesto;
@@ -176,24 +177,19 @@ namespace WinFormCarpinteria.Formularios
 			dgvDetalles.Rows.Clear();
 			for (int i = 0; i < tabla2.Rows.Count; i++)
 			{
-				dgvDetalles.Rows.Add(tabla2.Rows[i][0],tabla2.Rows[i][1], tabla2.Rows[i][2], tabla2.Rows[i][3]);
+				int prod = Convert.ToInt32(tabla2.Rows[i][0].ToString());
+				string nom = tabla2.Rows[i][1].ToString();
+				double pre = Convert.ToDouble(tabla2.Rows[i][2].ToString());
+				int cant = Convert.ToInt32(tabla2.Rows[i][3].ToString());
+
+				Producto p = new Producto(prod, nom, pre);
+				DetallePresupuesto detalle = new DetallePresupuesto(p, cant);
+
+				oPresupuesto.AgregarDetalle(detalle);
+				dgvDetalles.Rows.Add(new object[] { prod, nom, pre, cant });
 			}
 
-			//CalcularTotales();
-
-			//DataRowView item = (DataRowView)cboProducto.SelectedItem;
-
-			//int prod = int.Parse(tabla2.Rows[0][1].ToString());
-			//string nom = tabla2.Rows[0][1].ToString();
-			//double pre = Convert.ToDouble(item.Row.ItemArray[2]);
-			//int cant = Convert.ToInt32(txtCantidad.Text);
-
-			//Producto p = new Producto(prod, nom, pre);
-			//DetallePresupuesto detalle = new DetallePresupuesto(p, cant);
-
-			//nuevoPresupuesto.AgregarDetalle(detalle);
-			//dgvDetalles.Rows.Add(new object[] { prod, nom, pre, cant });
-
+			CalcularTotales();
 		}
 	}
 }
