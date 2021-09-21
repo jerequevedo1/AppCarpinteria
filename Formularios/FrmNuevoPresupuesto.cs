@@ -113,7 +113,7 @@ namespace WinFormCarpinteria.Formularios
 
 		private void btnCancelar_Click(object sender, EventArgs e)
 		{
-			Dispose();
+			Close();
 		}
 
 		private void btnAceptar_Click(object sender, EventArgs e)
