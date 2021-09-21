@@ -4,11 +4,11 @@ namespace WinFormCarpinteria.AccesoDatos
 {
 	interface IPresupuestoDao
 	{
-		bool CrearPresupuesto(Presupuesto oPresupuesto);
+		bool InsertarPresupuesto(Presupuesto oPresupuesto);
 		int ObtenerProximoNumero();
 		DataTable ListarProductos();
 		bool BorrarPresupuesto(int nroPresupuesto);
-		void EditarPresupuesto(int nroPresupuesto);
+		bool EditarPresupuesto(Presupuesto oPresupuesto);
 		DataTable CargarPresupuestoEdicion(int nroPresupuesto);
 		DataTable CargarDetallesPresupuestoEdicion(int nroPresupuesto);
 	}

@@ -19,8 +19,8 @@ namespace WinFormCarpinteria.Formularios
 
 		private void nuevoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			FrmNuevoPresupuesto nuevo = new FrmNuevoPresupuesto();
-			nuevo.HabilitarEdicion(FrmNuevoPresupuesto.EdicionPresupuesto.EdicionNoActiva);
+			FrmPresupuesto nuevo = new FrmPresupuesto();
+			nuevo.HabilitarEdicion(FrmPresupuesto.EdicionPresupuesto.EdicionNoActiva);
 			nuevo.ShowDialog();
 		}
 

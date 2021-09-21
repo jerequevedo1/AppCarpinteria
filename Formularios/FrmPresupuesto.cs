@@ -13,13 +13,13 @@ using WinFormCarpinteria.Servicios;
 
 namespace WinFormCarpinteria.Formularios
 {
-	public partial class FrmNuevoPresupuesto : Form
+	public partial class FrmPresupuesto : Form
 	{
 		private Presupuesto oPresupuesto;
 		private GestorPresupuesto gestor;
 
 		EdicionPresupuesto oEdicion;
-		public FrmNuevoPresupuesto()
+		public FrmPresupuesto()
 		{
 			InitializeComponent();
 			oPresupuesto = new Presupuesto();
@@ -131,6 +131,7 @@ namespace WinFormCarpinteria.Formularios
 				return;
 			}
 
+			CalcularTotales();
 			GuardarPresupuesto();
 		}
 
@@ -140,17 +141,33 @@ namespace WinFormCarpinteria.Formularios
 			oPresupuesto.Cliente = txtCliente.Text;
 			oPresupuesto.Descuento = double.Parse(txtDescuento.Text);
 			oPresupuesto.Total = Convert.ToDouble(txtTotal.Text);
-			
-			if (gestor.ConfirmarPresupuesto(oPresupuesto))
+
+			if (oEdicion==EdicionPresupuesto.EdicionNoActiva)
 			{
-				MessageBox.Show("Presupuesto registrado con exito.", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				Dispose();
+				if (gestor.NuevoPresupuesto(oPresupuesto))
+				{
+					MessageBox.Show("Presupuesto registrado con exito.", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					Close();
+				}
+				else
+				{
+					MessageBox.Show("ERROR. No se pudo registrar el presupuesto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
 			else
 			{
-				MessageBox.Show("ERROR. No se pudo registrar el presupuesto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				
+				if (gestor.EditarPresupuesto(oPresupuesto))
+				{
+					MessageBox.Show("Presupuesto editado con exito.", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					Close();
+				}
+				else
+				{
+					MessageBox.Show("ERROR. No se pudo editar el presupuesto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
+
+			
 		}
 
 		internal void HabilitarEdicion(EdicionPresupuesto edicion)
@@ -164,6 +181,7 @@ namespace WinFormCarpinteria.Formularios
 			CargarProductos();
 			cboProducto.DropDownStyle = ComboBoxStyle.DropDownList;
 			lblNroPresupuesto.Text += nroPresupuesto;
+			oPresupuesto.PresupuestoNro = nroPresupuesto;
 
 			DataTable tabla = gestor.CargarPresupuestoEdicion(nroPresupuesto);
 

@@ -1,7 +1,7 @@
 ﻿
 namespace WinFormCarpinteria.Formularios
 {
-	partial class FrmNuevoPresupuesto
+	partial class FrmPresupuesto
 	{
 		/// <summary>
 		/// Required designer variable.

@@ -76,11 +76,11 @@
     <Compile Include="Formularios\FrmConsultar.Designer.cs">
       <DependentUpon>FrmConsultar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\FrmNuevoPresupuesto.cs">
+    <Compile Include="Formularios\FrmPresupuesto.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\FrmNuevoPresupuesto.Designer.cs">
-      <DependentUpon>FrmNuevoPresupuesto.cs</DependentUpon>
+    <Compile Include="Formularios\FrmPresupuesto.Designer.cs">
+      <DependentUpon>FrmPresupuesto.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\FrmPrincipal.cs">
       <SubType>Form</SubType>
@@ -108,8 +108,8 @@
     <EmbeddedResource Include="Formularios\FrmConsultar.resx">
       <DependentUpon>FrmConsultar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\FrmNuevoPresupuesto.resx">
-      <DependentUpon>FrmNuevoPresupuesto.cs</DependentUpon>
+    <EmbeddedResource Include="Formularios\FrmPresupuesto.resx">
+      <DependentUpon>FrmPresupuesto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\FrmPrincipal.resx">
       <DependentUpon>FrmPrincipal.cs</DependentUpon>

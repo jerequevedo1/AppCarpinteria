@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using WinFormCarpinteria.AccesoDatos;
 using WinFormCarpinteria.Formularios;
 using WinFormCarpinteria.Servicios;
-using static WinFormCarpinteria.Formularios.FrmNuevoPresupuesto;
+using static WinFormCarpinteria.Formularios.FrmPresupuesto;
 
 namespace WinFormCarpinteria.Formularios
 {
@@ -173,12 +173,12 @@ namespace WinFormCarpinteria.Formularios
 			{
 				int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
 				//boton editar abre otro form
-				FrmNuevoPresupuesto ofrmPresupuesto= new FrmNuevoPresupuesto();
+				FrmPresupuesto ofrmPresupuesto= new FrmPresupuesto();
 				ofrmPresupuesto.HabilitarEdicion(EdicionPresupuesto.EdicionActiva);
 				ofrmPresupuesto.CargarEdicionPresupuesto(nroPresupuesto);
 				ofrmPresupuesto.ShowDialog();
 
-				//como hago para setear el form?
+				ConsultarPresupuestos();
 			}
 			if (dgvConsultar.CurrentCell.ColumnIndex == 5)
 			{

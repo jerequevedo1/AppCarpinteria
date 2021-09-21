@@ -7,7 +7,6 @@ D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClas
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.csproj.CoreCompileInputs.cache
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.exe
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.pdb
-D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.Formularios.FrmNuevoPresupuesto.resources
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.Formularios.FrmPrincipal.resources
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\bin\Debug\SqlServerTypes\x64\msvcr120.dll
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\bin\Debug\SqlServerTypes\x64\SqlServerSpatial140.dll
@@ -72,3 +71,4 @@ D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClas
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.Formularios.FrmReporteProductos.resources
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\RdlCompile.cache
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\RdlCompile.compiled
+D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.Formularios.FrmPresupuesto.resources

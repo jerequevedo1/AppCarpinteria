@@ -86,7 +86,7 @@ namespace WinFormCarpinteria.AccesoDatos
 			return tabla;
 		}
 
-		public bool CrearPresupuesto(Presupuesto oPresupuesto)
+		public bool InsertarPresupuesto(Presupuesto oPresupuesto)
 		{
 			bool resultado = true;
 
@@ -146,9 +146,75 @@ namespace WinFormCarpinteria.AccesoDatos
 			return resultado;
 		}
 
-		public void EditarPresupuesto(int nroPresupuesto)
+		public bool EditarPresupuesto(Presupuesto oPresupuesto)
 		{
-			throw new NotImplementedException();
+
+			bool resultado = true;
+
+			SqlConnection cnn = new SqlConnection();
+			SqlTransaction trans = null;
+
+			try
+			{
+				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+				cnn.Open();
+				trans = cnn.BeginTransaction();
+				SqlCommand cmd = new SqlCommand();
+				cmd.Connection = cnn;
+				cmd.Transaction = trans;
+				cmd.CommandText = "SP_EDITAR_PRESUPUESTO";
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.AddWithValue("@nro_presupuesto", oPresupuesto.PresupuestoNro);
+				cmd.Parameters.AddWithValue("@fecha", oPresupuesto.Fecha);
+				cmd.Parameters.AddWithValue("@cliente", oPresupuesto.Cliente);
+				cmd.Parameters.AddWithValue("@descuento", oPresupuesto.Descuento);
+				cmd.Parameters.AddWithValue("@total", oPresupuesto.Total);
+				cmd.ExecuteNonQuery();
+
+				int detalleNro = 1;
+
+				//borro todos los detalles y cargo detalles actuales nuevamente?
+		
+				SqlCommand cmdBorrado = new SqlCommand();
+				cmdBorrado.Connection = cnn;
+				cmdBorrado.Transaction = trans;
+				cmdBorrado.CommandText = "SP_BORRAR_DETALLES";
+				cmdBorrado.CommandType = CommandType.StoredProcedure;
+				cmdBorrado.Parameters.AddWithValue("@nroPresupuesto", oPresupuesto.PresupuestoNro);
+				cmdBorrado.ExecuteNonQuery();
+
+				//como hago si elimina algun detalle el cliente? en bd quedaria un registro colgado
+
+				foreach (DetallePresupuesto item in oPresupuesto.Detalles)
+				{
+					SqlCommand cmdDet = new SqlCommand();
+					cmdDet.Connection = cnn;
+					cmdDet.Transaction = trans;
+					//cmdDet.CommandText = "SP_EDITAR_DETALLES_PRESUPUESTO"; edito o inserto de nuevo?
+					cmdDet.CommandText = "SP_INSERTAR_DETALLE";
+					cmdDet.CommandType = CommandType.StoredProcedure;
+					cmdDet.Parameters.AddWithValue("@presupuesto_nro", oPresupuesto.PresupuestoNro);
+					cmdDet.Parameters.AddWithValue("@detalle", detalleNro);
+					cmdDet.Parameters.AddWithValue("@id_producto", item.Producto.IdProducto);
+					cmdDet.Parameters.AddWithValue("@cantidad", item.Cantidad);
+					cmdDet.ExecuteNonQuery();
+					detalleNro++;
+				}
+
+				trans.Commit();
+			}
+			catch (Exception e)
+			{
+				string mensaje=e.Message;
+				trans.Rollback();
+				resultado = false;
+			}
+			finally
+			{
+				if (cnn != null && cnn.State == ConnectionState.Open) cnn.Close();
+			}
+
+			return resultado;
 		}
 
 		public DataTable ListarProductos()
