@@ -70,6 +70,7 @@ namespace WinFormCarpinteria.Formularios
 			this.dgvConsultar.Size = new System.Drawing.Size(544, 429);
 			this.dgvConsultar.TabIndex = 0;
 			this.dgvConsultar.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvConsultar_CellContentClick);
+			this.dgvConsultar.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvConsultar_CellDoubleClick);
 			// 
 			// cNroPresup
 			// 
@@ -193,6 +194,7 @@ namespace WinFormCarpinteria.Formularios
 			this.btnNuevoP.TabIndex = 9;
 			this.btnNuevoP.Text = "Nuevo Presupuesto";
 			this.btnNuevoP.UseVisualStyleBackColor = true;
+			this.btnNuevoP.Click += new System.EventHandler(this.btnNuevoP_Click);
 			// 
 			// lblFechaDesde
 			// 

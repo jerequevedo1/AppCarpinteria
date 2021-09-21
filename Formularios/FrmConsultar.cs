@@ -31,26 +31,18 @@ namespace WinFormCarpinteria.Formularios
 			dtpFechaDesde.Enabled = false;
 			dtpFechaHasta.Enabled = false;
 		}
-
 		private void CargarTiposFiltros()
 		{
-			//DataTable tabla = new DataTable();
-			//tabla = ConsultaDatos("SP_TIPOS_FILTROS");
-
-			//cboFiltro.DataSource = tabla;
-			//cboFiltro.ValueMember = "posicion";
-			//cboFiltro.DisplayMember = "columna";
 			string[] tiposFiltros = new string[] { "Numero Presupuesto", "Fecha", "Cliente" };
 			cboFiltro.Items.Clear();
 			cboFiltro.Items.AddRange(tiposFiltros);
 			cboFiltro.SelectedIndex=0;
 
 		}
-
 		private void ConsultarPresupuestos()
 		{
 			DataTable tabla = new DataTable();
-			tabla =ConsultaDatos("SP_CONSULTAR_PRESUPUESTOS");
+			tabla = gestor.ListarPresupuestos();
 
 			dgvConsultar.Rows.Clear();
 			for (int i = 0; i < tabla.Rows.Count; i++)
@@ -58,39 +50,23 @@ namespace WinFormCarpinteria.Formularios
 				dgvConsultar.Rows.Add(tabla.Rows[i]["presupuesto_nro"], tabla.Rows[i][1], tabla.Rows[i][2], tabla.Rows[i][5]);
 			}
 		}
-
-		private DataTable ConsultaDatos(string sp)
-		{
-			SqlConnection cnn = new SqlConnection();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			SqlCommand cmd = new SqlCommand();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = sp;
-			DataTable tabla = new DataTable();
-			tabla.Load(cmd.ExecuteReader());
-			cnn.Close();
-
-			return tabla;
-		}
-
 		private void btnFiltrar_Click(object sender, EventArgs e)
 		{
 			DataTable tabla = new DataTable();
 			SqlConnection cnn = new SqlConnection();
 			SqlCommand cmd = new SqlCommand();
 
+			//validar antes que el campo filtro tenga datos
+			if (txtFiltro.Text.Equals(string.Empty) && cboFiltro.SelectedIndex != 1)
+			{
+				dgvConsultar.Rows.Clear();
+				ConsultarPresupuestos();
+				return;
+			}
+
 			switch (cboFiltro.SelectedIndex)
 			{
 				case 0:
-					//validar antes que el campo filtro tenga datos
-					if (txtFiltro.Text.Equals(string.Empty))
-					{
-						dgvConsultar.Rows.Clear();
-						ConsultarPresupuestos();
-						return;
-					}
 					cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
 					cnn.Open();
 					cmd.Connection = cnn;
@@ -112,12 +88,6 @@ namespace WinFormCarpinteria.Formularios
 					cnn.Close();
 					break;
 				case 2:
-					if (txtFiltro.Text.Equals(string.Empty))
-					{
-						dgvConsultar.Rows.Clear();
-						ConsultarPresupuestos();
-						return;
-					}
 					cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
 					cnn.Open();
 					cmd.Connection = cnn;
@@ -169,10 +139,10 @@ namespace WinFormCarpinteria.Formularios
 
 		private void dgvConsultar_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
+			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
+
 			if (dgvConsultar.CurrentCell.ColumnIndex==4)
 			{
-				int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
-				//boton editar abre otro form
 				FrmPresupuesto ofrmPresupuesto= new FrmPresupuesto();
 				ofrmPresupuesto.HabilitarEdicion(EdicionPresupuesto.EdicionActiva);
 				ofrmPresupuesto.CargarEdicionPresupuesto(nroPresupuesto);
@@ -182,8 +152,6 @@ namespace WinFormCarpinteria.Formularios
 			}
 			if (dgvConsultar.CurrentCell.ColumnIndex == 5)
 			{
-				int nroPresupuesto =int.Parse( dgvConsultar.CurrentRow.Cells[0].Value.ToString());
-
 				DialogResult dialogResult = MessageBox.Show("Desea borrar este presupuesto?", "Borrar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 				if (dialogResult==DialogResult.Yes)
 				{
@@ -202,6 +170,21 @@ namespace WinFormCarpinteria.Formularios
 				
 			}
 
+		}
+
+		private void btnNuevoP_Click(object sender, EventArgs e)
+		{
+			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto();
+			ofrmPresupuesto.ShowDialog();
+		}
+		private void dgvConsultar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
+			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto();
+			ofrmPresupuesto.HabilitarEdicion(EdicionPresupuesto.EdicionActiva);
+			ofrmPresupuesto.CargarEdicionPresupuesto(nroPresupuesto);
+			ofrmPresupuesto.HabilitarConsulta(ModoConsulta.ConsultaActiva);
+			ofrmPresupuesto.ShowDialog();
 		}
 	}
 }

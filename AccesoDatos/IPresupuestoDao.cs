@@ -11,5 +11,6 @@ namespace WinFormCarpinteria.AccesoDatos
 		bool EditarPresupuesto(Presupuesto oPresupuesto);
 		DataTable CargarPresupuestoEdicion(int nroPresupuesto);
 		DataTable CargarDetallesPresupuestoEdicion(int nroPresupuesto);
+		DataTable ListarPresupuestos();
 	}
 }

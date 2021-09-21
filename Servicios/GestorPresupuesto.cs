@@ -51,5 +51,10 @@ namespace WinFormCarpinteria.Servicios
 		{
 			return dao.EditarPresupuesto(oPresupuesto);
 		}
+
+		public DataTable ListarPresupuestos()
+		{
+			return dao.ListarPresupuestos();
+		}
 	}
 }

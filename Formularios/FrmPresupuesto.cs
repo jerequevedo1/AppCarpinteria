@@ -18,7 +18,8 @@ namespace WinFormCarpinteria.Formularios
 		private Presupuesto oPresupuesto;
 		private GestorPresupuesto gestor;
 
-		EdicionPresupuesto oEdicion;
+		EdicionPresupuesto oEdicion=EdicionPresupuesto.EdicionNoActiva;
+		ModoConsulta oConsulta;
 		public FrmPresupuesto()
 		{
 			InitializeComponent();
@@ -30,6 +31,11 @@ namespace WinFormCarpinteria.Formularios
 		{
 			EdicionActiva,
 			EdicionNoActiva
+		}
+		public enum ModoConsulta
+		{
+			ConsultaActiva,
+			ConsultaNoActiva
 		}
 
 		private void FrmNuevoPresupuesto_Load(object sender, EventArgs e)
@@ -57,7 +63,6 @@ namespace WinFormCarpinteria.Formularios
 			}
 			
 		}
-
 		private void btnAgregar_Click(object sender, EventArgs e)
 		{
 			if (cboProducto.Text.Equals(string.Empty))
@@ -134,7 +139,6 @@ namespace WinFormCarpinteria.Formularios
 			CalcularTotales();
 			GuardarPresupuesto();
 		}
-
 		private void GuardarPresupuesto()
 		{
 			oPresupuesto.Fecha = Convert.ToDateTime(txtFecha.Text);
@@ -208,6 +212,21 @@ namespace WinFormCarpinteria.Formularios
 			}
 
 			CalcularTotales();
+		}
+
+		public void HabilitarConsulta(ModoConsulta consulta)
+		{
+			oConsulta = consulta;
+			if (oConsulta==ModoConsulta.ConsultaActiva)
+			{
+				btnAceptar.Hide();
+				txtCliente.Enabled = false;
+				txtDescuento.Enabled = false;
+				cboProducto.Enabled = false;
+				txtCantidad.Enabled = false;
+				btnAgregar.Enabled = false;
+				dgvDetalles.Enabled = false;
+			}
 		}
 	}
 }

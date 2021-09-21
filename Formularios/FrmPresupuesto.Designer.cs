@@ -135,6 +135,7 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			// cboProducto
 			// 
+			this.cboProducto.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboProducto.FormattingEnabled = true;
 			this.cboProducto.Location = new System.Drawing.Point(34, 183);
 			this.cboProducto.Name = "cboProducto";
@@ -238,7 +239,7 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			// btnAceptar
 			// 
-			this.btnAceptar.Location = new System.Drawing.Point(191, 479);
+			this.btnAceptar.Location = new System.Drawing.Point(361, 477);
 			this.btnAceptar.Name = "btnAceptar";
 			this.btnAceptar.Size = new System.Drawing.Size(100, 23);
 			this.btnAceptar.TabIndex = 15;
@@ -248,7 +249,7 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			// btnCancelar
 			// 
-			this.btnCancelar.Location = new System.Drawing.Point(297, 479);
+			this.btnCancelar.Location = new System.Drawing.Point(467, 477);
 			this.btnCancelar.Name = "btnCancelar";
 			this.btnCancelar.Size = new System.Drawing.Size(100, 23);
 			this.btnCancelar.TabIndex = 16;
@@ -256,7 +257,7 @@ namespace WinFormCarpinteria.Formularios
 			this.btnCancelar.UseVisualStyleBackColor = true;
 			this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
 			// 
-			// FrmNuevoPresupuesto
+			// FrmPresupuesto
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -278,7 +279,7 @@ namespace WinFormCarpinteria.Formularios
 			this.Controls.Add(this.lblCliente);
 			this.Controls.Add(this.lblFecha);
 			this.Controls.Add(this.lblNroPresupuesto);
-			this.Name = "FrmNuevoPresupuesto";
+			this.Name = "FrmPresupuesto";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Nuevo Presupuesto";
 			this.Load += new System.EventHandler(this.FrmNuevoPresupuesto_Load);
