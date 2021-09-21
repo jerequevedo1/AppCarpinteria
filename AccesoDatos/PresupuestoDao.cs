@@ -52,6 +52,40 @@ namespace WinFormCarpinteria.AccesoDatos
 			return resultado;
 		}
 
+		public DataTable CargarDetallesPresupuestoEdicion(int nroPresupuesto)
+		{
+			SqlConnection cnn = new SqlConnection();
+			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+			cnn.Open();
+			SqlCommand cmd2 = new SqlCommand();
+			cmd2.Connection = cnn;
+			cmd2.CommandType = CommandType.StoredProcedure;
+			cmd2.CommandText = "SP_CONSULTAR_DETALLES";
+			cmd2.Parameters.AddWithValue("@nro_presupuesto", nroPresupuesto);
+			DataTable tabla2 = new DataTable();
+			tabla2.Load(cmd2.ExecuteReader());
+			cnn.Close();
+
+			return tabla2;
+		}
+
+		public DataTable CargarPresupuestoEdicion(int nroPresupuesto)
+		{
+			SqlConnection cnn = new SqlConnection();
+			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+			cnn.Open();
+			SqlCommand cmd = new SqlCommand();
+			cmd.Connection = cnn;
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.CommandText = "SP_CONSULTAR_UN_PRESUPUESTO";
+			cmd.Parameters.AddWithValue("@nroPresupuesto", nroPresupuesto);
+			DataTable tabla = new DataTable();
+			tabla.Load(cmd.ExecuteReader());
+			cnn.Close();
+
+			return tabla;
+		}
+
 		public bool CrearPresupuesto(Presupuesto oPresupuesto)
 		{
 			bool resultado = true;

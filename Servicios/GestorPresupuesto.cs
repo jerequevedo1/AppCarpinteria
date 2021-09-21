@@ -39,5 +39,13 @@ namespace WinFormCarpinteria.Servicios
 		{
 			return dao.BorrarPresupuesto(nroPresupuesto);
 		}
+		public DataTable CargarPresupuestoEdicion(int nroPresupuesto)
+		{
+			return dao.CargarPresupuestoEdicion(nroPresupuesto);
+		}
+		public DataTable CargarDetallesPresupuestoEdicion(int nroPresupuesto)
+		{
+			return dao.CargarDetallesPresupuestoEdicion(nroPresupuesto);
+		}
 	}
 }

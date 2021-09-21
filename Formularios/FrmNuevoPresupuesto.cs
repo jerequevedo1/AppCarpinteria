@@ -43,7 +43,6 @@ namespace WinFormCarpinteria.Formularios
 				txtDescuento.Text = "0";
 				txtCantidad.Text = "1";
 			}
-			
 		}
 
 		private void CargarProductos()
@@ -164,47 +163,23 @@ namespace WinFormCarpinteria.Formularios
 			CargarProductos();
 			cboProducto.DropDownStyle = ComboBoxStyle.DropDownList;
 			lblNroPresupuesto.Text += nroPresupuesto;
-			// traigo datos del presupuesto
 
-
-			SqlConnection cnn = new SqlConnection();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			SqlCommand cmd = new SqlCommand();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_CONSULTAR_UN_PRESUPUESTO";
-			cmd.Parameters.AddWithValue("@nroPresupuesto", nroPresupuesto);
-			DataTable tabla = new DataTable();
-			tabla.Load(cmd.ExecuteReader());
-			cnn.Close();
+			DataTable tabla = gestor.CargarPresupuestoEdicion(nroPresupuesto);
 
 			txtFecha.Text = tabla.Rows[0][1].ToString();
 			txtCliente.Text = tabla.Rows[0][2].ToString();
 			txtDescuento.Text = tabla.Rows[0][3].ToString();
 			txtCantidad.Text = "1";
 
-			// traigo datos de los detalles de ese presupuesto
-
-			//tabla.Rows.Clear();
-			tabla.Clear();
-
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			SqlCommand cmd2 = new SqlCommand();
-			cmd2.Connection = cnn;
-			cmd2.CommandType = CommandType.StoredProcedure;
-			cmd2.CommandText = "SP_CONSULTAR_DETALLES";
-			cmd2.Parameters.AddWithValue("@nro_presupuesto", nroPresupuesto);
-			DataTable tabla2 = new DataTable();
-			tabla2.Load(cmd2.ExecuteReader());
-			cnn.Close();
+			DataTable tabla2 = gestor.CargarDetallesPresupuestoEdicion(nroPresupuesto);
 
 			dgvDetalles.Rows.Clear();
 			for (int i = 0; i < tabla2.Rows.Count; i++)
 			{
 				dgvDetalles.Rows.Add(tabla2.Rows[i][0],tabla2.Rows[i][1], tabla2.Rows[i][2], tabla2.Rows[i][3]);
 			}
+
+			//CalcularTotales();
 
 			//DataRowView item = (DataRowView)cboProducto.SelectedItem;
 
@@ -218,8 +193,6 @@ namespace WinFormCarpinteria.Formularios
 
 			//nuevoPresupuesto.AgregarDetalle(detalle);
 			//dgvDetalles.Rows.Add(new object[] { prod, nom, pre, cant });
-
-			//CalcularTotales();
 
 		}
 	}

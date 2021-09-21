@@ -9,5 +9,7 @@ namespace WinFormCarpinteria.AccesoDatos
 		DataTable ListarProductos();
 		bool BorrarPresupuesto(int nroPresupuesto);
 		void EditarPresupuesto(int nroPresupuesto);
+		DataTable CargarPresupuestoEdicion(int nroPresupuesto);
+		DataTable CargarDetallesPresupuestoEdicion(int nroPresupuesto);
 	}
 }
