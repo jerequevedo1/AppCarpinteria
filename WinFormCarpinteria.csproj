@@ -70,6 +70,7 @@
     <Compile Include="AccesoDatos\IPresupuestoDao.cs" />
     <Compile Include="AccesoDatos\PresupuestoDao.cs" />
     <Compile Include="Entidades\DetallePresupuesto.cs" />
+    <Compile Include="Entidades\ListadoPresupuestos.cs" />
     <Compile Include="Formularios\FrmConsultar.cs">
       <SubType>Form</SubType>
     </Compile>

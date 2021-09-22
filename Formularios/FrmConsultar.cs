@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinFormCarpinteria.AccesoDatos;
+using WinFormCarpinteria.Entidades;
 using WinFormCarpinteria.Formularios;
 using WinFormCarpinteria.Servicios;
 using static WinFormCarpinteria.Formularios.FrmPresupuesto;
@@ -18,10 +19,12 @@ namespace WinFormCarpinteria.Formularios
 	public partial class FrmConsultar : Form
 	{
 		private GestorPresupuesto gestor;
+		private ListadoPresupuestos presupuestos;
 		public FrmConsultar()
 		{
 			InitializeComponent();
 			gestor = new GestorPresupuesto(new DaoFactory());
+			presupuestos = new ListadoPresupuestos();
 		}
 
 		private void FrmConsultar_Load(object sender, EventArgs e)
@@ -37,18 +40,31 @@ namespace WinFormCarpinteria.Formularios
 			cboFiltro.Items.Clear();
 			cboFiltro.Items.AddRange(tiposFiltros);
 			cboFiltro.SelectedIndex=0;
-
 		}
 		private void ConsultarPresupuestos()
 		{
 			DataTable tabla = new DataTable();
 			tabla = gestor.ListarPresupuestos();
 
+			DataTableReader lector=tabla.CreateDataReader();
 			dgvConsultar.Rows.Clear();
-			for (int i = 0; i < tabla.Rows.Count; i++)
+			while (lector.Read())
 			{
-				dgvConsultar.Rows.Add(tabla.Rows[i]["presupuesto_nro"], tabla.Rows[i][1], tabla.Rows[i][2], tabla.Rows[i][5]);
+				Presupuesto p = new Presupuesto();
+				p.PresupuestoNro = lector.GetInt32(0);
+				p.Fecha = Convert.ToDateTime(lector.GetString(1));
+				if (!lector.IsDBNull(2)) p.Cliente = lector.GetString(2);
+				if (!lector.IsDBNull(3)) p.Descuento = Convert.ToDouble(lector.GetValue(3));
+				p.Total = Convert.ToDouble(lector.GetValue(5));
+
+				presupuestos.Agregar(p);
+				dgvConsultar.Rows.Add(new object[] { p.PresupuestoNro,p.Fecha.ToString("dd/MM/yyyy"),p.Cliente,p.Total });
 			}
+			//dgvConsultar.Rows.Clear();
+			//for (int i = 0; i < tabla.Rows.Count; i++)
+			//{
+			//	dgvConsultar.Rows.Add(tabla.Rows[i]["presupuesto_nro"], tabla.Rows[i][1], tabla.Rows[i][2], tabla.Rows[i][5]);
+			//}
 		}
 		private void btnFiltrar_Click(object sender, EventArgs e)
 		{
