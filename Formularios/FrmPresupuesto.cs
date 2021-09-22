@@ -226,7 +226,6 @@ namespace WinFormCarpinteria.Formularios
 				txtCantidad.Enabled = false;
 				btnAgregar.Enabled = false;
 				dgvDetalles.Enabled = false;
-				dgvDetalles.CurrentCell = null;
 			}
 		}
 	}

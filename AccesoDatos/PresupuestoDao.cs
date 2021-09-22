@@ -285,5 +285,56 @@ namespace WinFormCarpinteria.AccesoDatos
 
 			return tabla;
 		}
+
+		public DataTable FiltrarNroPresupuesto(int nroPresupuesto)
+		{
+			DataTable tabla = new DataTable();
+			SqlConnection cnn = new SqlConnection();
+			SqlCommand cmd = new SqlCommand();
+			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+			cnn.Open();
+			cmd.Connection = cnn;
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.CommandText = "SP_FILTRO_NROPRESUP";
+			cmd.Parameters.AddWithValue("@nro_presup", nroPresupuesto);
+			tabla.Load(cmd.ExecuteReader());
+			cnn.Close();
+
+			return tabla;
+		}
+
+		public DataTable FiltrarFecha(DateTime fechaDesde, DateTime fechaHasta)
+		{
+			DataTable tabla = new DataTable();
+			SqlConnection cnn = new SqlConnection();
+			SqlCommand cmd = new SqlCommand();
+			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+			cnn.Open();
+			cmd.Connection = cnn;
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.CommandText = "SP_FILTRO_FECHA";
+			cmd.Parameters.AddWithValue("@fechaDesde",fechaDesde);
+			cmd.Parameters.AddWithValue("@fechaHasta", fechaHasta);
+			tabla.Load(cmd.ExecuteReader());
+			cnn.Close();
+
+			return tabla;
+		}
+
+		public DataTable FiltrarCliente(string cliente)
+		{
+			DataTable tabla = new DataTable();
+			SqlConnection cnn = new SqlConnection();
+			SqlCommand cmd = new SqlCommand();
+			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+			cnn.Open();
+			cmd.Connection = cnn;
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.CommandText = "SP_FILTRO_CLIENTE";
+			cmd.Parameters.AddWithValue("@cliente",cliente);
+			tabla.Load(cmd.ExecuteReader());
+			cnn.Close();
+			return tabla;
+		}
 	}
 }

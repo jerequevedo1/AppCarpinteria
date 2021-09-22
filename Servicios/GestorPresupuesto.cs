@@ -56,5 +56,18 @@ namespace WinFormCarpinteria.Servicios
 		{
 			return dao.ListarPresupuestos();
 		}
+
+		public DataTable FiltrarNroPresupuesto(int nroPresupuesto)
+		{
+			return dao.FiltrarNroPresupuesto(nroPresupuesto);
+		}
+		public DataTable FiltrarFecha(DateTime fechaDesde, DateTime fechaHasta)
+		{
+			return dao.FiltrarFecha(fechaDesde,fechaHasta);
+		}
+		public DataTable FiltrarCliente(string cliente)
+		{
+			return dao.FiltrarCliente(cliente);
+		}
 	}
 }

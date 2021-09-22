@@ -60,18 +60,9 @@ namespace WinFormCarpinteria.Formularios
 				presupuestos.Agregar(p);
 				dgvConsultar.Rows.Add(new object[] { p.PresupuestoNro,p.Fecha.ToString("dd/MM/yyyy"),p.Cliente,p.Total });
 			}
-			//dgvConsultar.Rows.Clear();
-			//for (int i = 0; i < tabla.Rows.Count; i++)
-			//{
-			//	dgvConsultar.Rows.Add(tabla.Rows[i]["presupuesto_nro"], tabla.Rows[i][1], tabla.Rows[i][2], tabla.Rows[i][5]);
-			//}
 		}
 		private void btnFiltrar_Click(object sender, EventArgs e)
 		{
-			DataTable tabla = new DataTable();
-			SqlConnection cnn = new SqlConnection();
-			SqlCommand cmd = new SqlCommand();
-
 			//validar antes que el campo filtro tenga datos
 			if (txtFiltro.Text.Equals(string.Empty) && cboFiltro.SelectedIndex != 1)
 			{
@@ -79,46 +70,43 @@ namespace WinFormCarpinteria.Formularios
 				ConsultarPresupuestos();
 				return;
 			}
+			DataTable tabla = new DataTable();
+			int nroPresup = int.Parse(txtFiltro.Text);
+			string cliente = txtFiltro.Text;
+			DateTime fechaDesde = dtpFechaDesde.Value;
+			DateTime fechaHasta = dtpFechaHasta.Value;
 
 			switch (cboFiltro.SelectedIndex)
 			{
 				case 0:
-					cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-					cnn.Open();
-					cmd.Connection = cnn;
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.CommandText = "SP_FILTRO_NROPRESUP";
-					cmd.Parameters.AddWithValue("@nro_presup", int.Parse(txtFiltro.Text));
-					tabla.Load(cmd.ExecuteReader());
-					cnn.Close();
+					tabla = gestor.FiltrarNroPresupuesto(nroPresup);
+					
 					break;
 				case 1:
-					cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-					cnn.Open();
-					cmd.Connection = cnn;
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.CommandText = "SP_FILTRO_FECHA";
-					cmd.Parameters.AddWithValue("@fechaDesde", dtpFechaDesde.Value);
-					cmd.Parameters.AddWithValue("@fechaHasta", dtpFechaHasta.Value);
-					tabla.Load(cmd.ExecuteReader());
-					cnn.Close();
+					tabla = gestor.FiltrarFecha(fechaDesde,fechaHasta);
 					break;
 				case 2:
-					cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-					cnn.Open();
-					cmd.Connection = cnn;
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.CommandText = "SP_FILTRO_CLIENTE";
-					cmd.Parameters.AddWithValue("@cliente", txtFiltro.Text);
-					tabla.Load(cmd.ExecuteReader());
-					cnn.Close();
+					tabla = gestor.FiltrarCliente(cliente);
 					break;
 			}
 
 			dgvConsultar.Rows.Clear();
-			for (int i = 0; i < tabla.Rows.Count; i++)
+			//for (int i = 0; i < tabla.Rows.Count; i++)
+			//{
+			//	dgvConsultar.Rows.Add(tabla.Rows[i]["presupuesto_nro"], tabla.Rows[i][1], tabla.Rows[i][2], tabla.Rows[i][5]);
+			//}
+			DataTableReader lector = tabla.CreateDataReader();
+			while (lector.Read())
 			{
-				dgvConsultar.Rows.Add(tabla.Rows[i]["presupuesto_nro"], tabla.Rows[i][1], tabla.Rows[i][2], tabla.Rows[i][5]);
+				Presupuesto p = new Presupuesto();
+				p.PresupuestoNro = lector.GetInt32(0);
+				p.Fecha = Convert.ToDateTime(lector.GetString(1));
+				if (!lector.IsDBNull(2)) p.Cliente = lector.GetString(2);
+				if (!lector.IsDBNull(3)) p.Descuento = Convert.ToDouble(lector.GetValue(3));
+				p.Total = Convert.ToDouble(lector.GetValue(5));
+
+				presupuestos.Agregar(p);
+				dgvConsultar.Rows.Add(new object[] { p.PresupuestoNro, p.Fecha.ToString("dd/MM/yyyy"), p.Cliente, p.Total });
 			}
 		}
 
