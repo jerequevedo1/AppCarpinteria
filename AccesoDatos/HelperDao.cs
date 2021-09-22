@@ -12,11 +12,13 @@ namespace WinFormCarpinteria.AccesoDatos
 	{
 		private static HelperDao instancia;
 		private string cadenaConexion;
-		SqlConnection cnn = new SqlConnection();
-		SqlCommand cmd = new SqlCommand();
+		SqlConnection cnn;
+		SqlCommand cmd;
 		private HelperDao()
 		{
-			cadenaConexion = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";			
+			cadenaConexion = Properties.Resources.strConexion;
+			cnn = new SqlConnection(cadenaConexion);
+			cmd = new SqlCommand();
 		}
 		public static HelperDao ObtenerInstancia()
 		{
@@ -28,18 +30,15 @@ namespace WinFormCarpinteria.AccesoDatos
 		}
 		public DataTable ConsultaSQL(string nombreSP)
 		{
-			
 			DataTable tabla = new DataTable();
 			try
 			{
-				cnn.ConnectionString = cadenaConexion;
+				cmd.Parameters.Clear();
 				cnn.Open();
-				cmd.Connection = cnn;
+				cmd.Connection = cnn;				
 				cmd.CommandType = CommandType.StoredProcedure;
 				cmd.CommandText = nombreSP;
 				tabla.Load(cmd.ExecuteReader());
-
-				return tabla;
 			}
 			catch (Exception ex)
 			{
@@ -50,14 +49,14 @@ namespace WinFormCarpinteria.AccesoDatos
 				if(cnn.State==ConnectionState.Open)
 				cnn.Close();
 			}
+			return tabla;
 		}
 		public int ProximoID(string nombreSP,string nombreParam)
 		{
 			SqlParameter param = new SqlParameter(nombreParam, SqlDbType.Int);
 			try
 			{
-				
-				cnn.ConnectionString = cadenaConexion;
+				cmd.Parameters.Clear();
 				cnn.Open();
 				cmd.Connection = cnn;
 				cmd.CommandType = CommandType.StoredProcedure;
@@ -76,6 +75,29 @@ namespace WinFormCarpinteria.AccesoDatos
 				if (cnn.State == ConnectionState.Open)
 					cnn.Close();
 			}
+		}
+		public int EjecutarSQL(string nombreSP)
+		{
+			int filasAfectadas = 0;
+			try
+			{
+				cmd.Parameters.Clear();
+				cnn.Open();
+				cmd.Connection = cnn;
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.CommandText = nombreSP;
+				filasAfectadas=cmd.ExecuteNonQuery();
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			finally
+			{
+				if (cnn.State == ConnectionState.Open)
+					cnn.Close();
+			}
+			return filasAfectadas;
 		}
 
 	}

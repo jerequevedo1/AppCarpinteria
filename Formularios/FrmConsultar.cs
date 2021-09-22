@@ -180,6 +180,7 @@ namespace WinFormCarpinteria.Formularios
 		{
 			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto();
 			ofrmPresupuesto.ShowDialog();
+			ConsultarPresupuestos();
 		}
 		private void dgvConsultar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
