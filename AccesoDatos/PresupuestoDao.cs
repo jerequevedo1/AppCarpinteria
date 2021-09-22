@@ -219,55 +219,12 @@ namespace WinFormCarpinteria.AccesoDatos
 
 		public DataTable ListarProductos()
 		{
-			DataTable tabla;
-			try
-			{
-				SqlConnection cnn = new SqlConnection();
-				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-				cnn.Open();
-				SqlCommand cmd = new SqlCommand();
-				cmd.Connection = cnn;
-				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.CommandText = "SP_CONSULTAR_PRODUCTOS";
-				tabla = new DataTable();
-				tabla.Load(cmd.ExecuteReader());
-				cnn.Close();
-			}
-			catch (Exception)
-			{
-				tabla=null;
-			}
-			
-			return tabla;
+			return HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRODUCTOS");
 		}
 
 		public int ObtenerProximoNumero()
 		{
-			int nro = 0;
-
-			try
-			{
-				SqlConnection cnn = new SqlConnection();
-				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-				cnn.Open();
-				SqlCommand cmd = new SqlCommand();
-				cmd.Connection = cnn;
-				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.CommandText = "SP_PROXIMO_ID";
-				SqlParameter param = new SqlParameter("@next", SqlDbType.Int);
-				param.Direction = ParameterDirection.Output;
-				cmd.Parameters.Add(param);
-				cmd.ExecuteNonQuery();
-				cnn.Close();
-
-				nro = (int)param.Value;
-			}
-			catch (Exception)
-			{
-				nro = -1;
-			}
-
-			return nro;
+			return HelperDao.ObtenerInstancia().ProximoID("SP_PROXIMO_ID", "@next");
 		}
 
 		public DataTable ListarPresupuestos()
