@@ -9,5 +9,6 @@ namespace WinFormCarpinteria.AccesoDatos
 	abstract class AbstractDaoFactory
 	{
 		public abstract IPresupuestoDao CrearPresupuestoDao();
+		public abstract IListadoPresupuestos CrearListadoPresupuestosDao();
 	}
 }

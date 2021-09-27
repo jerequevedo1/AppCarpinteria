@@ -12,5 +12,9 @@ namespace WinFormCarpinteria.AccesoDatos
 		{
 			return new PresupuestoDao();
 		}
+		public override IListadoPresupuestos CrearListadoPresupuestosDao()
+		{
+			return new ListadoPresupuestosDao();
+		}
 	}
 }
