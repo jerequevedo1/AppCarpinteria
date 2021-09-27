@@ -34,33 +34,6 @@ namespace WinFormCarpinteria.Formularios
 			dtpFechaDesde.Enabled = false;
 			dtpFechaHasta.Enabled = false;
 		}
-		private void CargarTiposFiltros()
-		{
-			string[] tiposFiltros = new string[] { "Numero Presupuesto", "Fecha", "Cliente" };
-			cboFiltro.Items.Clear();
-			cboFiltro.Items.AddRange(tiposFiltros);
-			cboFiltro.SelectedIndex=0;
-		}
-		private void ConsultarPresupuestos()
-		{
-			DataTable tabla = new DataTable();
-			tabla = gestor.ListarPresupuestos();
-
-			DataTableReader lector=tabla.CreateDataReader();
-			dgvConsultar.Rows.Clear();
-			while (lector.Read())
-			{
-				Presupuesto p = new Presupuesto();
-				p.PresupuestoNro = lector.GetInt32(0);
-				p.Fecha = Convert.ToDateTime(lector.GetString(1));
-				if (!lector.IsDBNull(2)) p.Cliente = lector.GetString(2);
-				if (!lector.IsDBNull(3)) p.Descuento = Convert.ToDouble(lector.GetValue(3));
-				p.Total = Convert.ToDouble(lector.GetValue(5));
-
-				presupuestos.Agregar(p);
-				dgvConsultar.Rows.Add(new object[] { p.PresupuestoNro,p.Fecha.ToString("dd/MM/yyyy"),p.Cliente,p.Total });
-			}
-		}
 		private void btnFiltrar_Click(object sender, EventArgs e)
 		{
 			//validar antes que el campo filtro tenga datos
@@ -109,7 +82,6 @@ namespace WinFormCarpinteria.Formularios
 				dgvConsultar.Rows.Add(new object[] { p.PresupuestoNro, p.Fecha.ToString("dd/MM/yyyy"), p.Cliente, p.Total });
 			}
 		}
-
 		private void cboFiltro_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			txtFiltro.Text = string.Empty;
@@ -127,7 +99,6 @@ namespace WinFormCarpinteria.Formularios
 				txtFiltro.Enabled = true;
 			}
 		}
-
 		private void btnEliminarFiltro_Click(object sender, EventArgs e)
 		{
 			dgvConsultar.Rows.Clear();
@@ -135,12 +106,10 @@ namespace WinFormCarpinteria.Formularios
 			txtFiltro.Text = string.Empty;
 			cboFiltro.SelectedIndex = 0;
 		}
-
 		private void btnCancelar_Click(object sender, EventArgs e)
 		{
 			Close();
 		}
-
 		private void dgvConsultar_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
@@ -175,7 +144,6 @@ namespace WinFormCarpinteria.Formularios
 			}
 
 		}
-
 		private void btnNuevoP_Click(object sender, EventArgs e)
 		{
 			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto();
@@ -190,6 +158,34 @@ namespace WinFormCarpinteria.Formularios
 			ofrmPresupuesto.CargarEdicionPresupuesto(nroPresupuesto);
 			ofrmPresupuesto.HabilitarConsulta(ModoConsulta.ConsultaActiva);
 			ofrmPresupuesto.ShowDialog();
+		}
+
+		private void CargarTiposFiltros()
+		{
+			string[] tiposFiltros = new string[] { "Numero Presupuesto", "Fecha", "Cliente" };
+			cboFiltro.Items.Clear();
+			cboFiltro.Items.AddRange(tiposFiltros);
+			cboFiltro.SelectedIndex = 0;
+		}
+		private void ConsultarPresupuestos()
+		{
+			DataTable tabla = new DataTable();
+			tabla = gestor.ListarPresupuestos();
+
+			DataTableReader lector = tabla.CreateDataReader();
+			dgvConsultar.Rows.Clear();
+			while (lector.Read())
+			{
+				Presupuesto p = new Presupuesto();
+				p.PresupuestoNro = lector.GetInt32(0);
+				p.Fecha = Convert.ToDateTime(lector.GetString(1));
+				if (!lector.IsDBNull(2)) p.Cliente = lector.GetString(2);
+				if (!lector.IsDBNull(3)) p.Descuento = Convert.ToDouble(lector.GetValue(3));
+				p.Total = Convert.ToDouble(lector.GetValue(5));
+
+				presupuestos.Agregar(p);
+				dgvConsultar.Rows.Add(new object[] { p.PresupuestoNro, p.Fecha.ToString("dd/MM/yyyy"), p.Cliente, p.Total });
+			}
 		}
 	}
 }

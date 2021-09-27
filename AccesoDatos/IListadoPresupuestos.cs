@@ -9,9 +9,9 @@ namespace WinFormCarpinteria.AccesoDatos
 {
 	interface IListadoPresupuestos
 	{
-		DataTable CargarPresupuestoEdicion(int nroPresupuesto);
-		DataTable CargarDetallesPresupuestoEdicion(int nroPresupuesto);
-		DataTable ListarPresupuestos();
+		DataTable ConsultarPresupuestos();
+		DataTable ConsultarPresupuestoEditar(int nroPresupuesto);
+		DataTable ConsultarDetallesPresupuestoEditar(int nroPresupuesto);
 		DataTable FiltrarNroPresupuesto(int nroPresupuesto);
 		DataTable FiltrarFecha(DateTime fechaDesde, DateTime fechaHasta);
 		DataTable FiltrarCliente(string cliente);

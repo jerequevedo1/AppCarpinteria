@@ -10,23 +10,22 @@ namespace WinFormCarpinteria.AccesoDatos
 {
 	class ListadoPresupuestosDao:IListadoPresupuestos
 	{
-		public DataTable CargarDetallesPresupuestoEdicion(int nroPresupuesto)
+		public DataTable ConsultarPresupuestos()
 		{
 			SqlConnection cnn = new SqlConnection();
 			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
 			cnn.Open();
-			SqlCommand cmd2 = new SqlCommand();
-			cmd2.Connection = cnn;
-			cmd2.CommandType = CommandType.StoredProcedure;
-			cmd2.CommandText = "SP_CONSULTAR_DETALLES";
-			cmd2.Parameters.AddWithValue("@nro_presupuesto", nroPresupuesto);
-			DataTable tabla2 = new DataTable();
-			tabla2.Load(cmd2.ExecuteReader());
+			SqlCommand cmd = new SqlCommand();
+			cmd.Connection = cnn;
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.CommandText = "SP_CONSULTAR_PRESUPUESTOS";
+			DataTable tabla = new DataTable();
+			tabla.Load(cmd.ExecuteReader());
 			cnn.Close();
 
-			return tabla2;
+			return tabla;
 		}
-		public DataTable CargarPresupuestoEdicion(int nroPresupuesto)
+		public DataTable ConsultarPresupuestoEditar(int nroPresupuesto)
 		{
 			SqlConnection cnn = new SqlConnection();
 			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
@@ -42,23 +41,22 @@ namespace WinFormCarpinteria.AccesoDatos
 
 			return tabla;
 		}
-
-		public DataTable ListarPresupuestos()
+		public DataTable ConsultarDetallesPresupuestoEditar(int nroPresupuesto)
 		{
 			SqlConnection cnn = new SqlConnection();
 			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
 			cnn.Open();
-			SqlCommand cmd = new SqlCommand();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_CONSULTAR_PRESUPUESTOS";
-			DataTable tabla = new DataTable();
-			tabla.Load(cmd.ExecuteReader());
+			SqlCommand cmd2 = new SqlCommand();
+			cmd2.Connection = cnn;
+			cmd2.CommandType = CommandType.StoredProcedure;
+			cmd2.CommandText = "SP_CONSULTAR_DETALLES";
+			cmd2.Parameters.AddWithValue("@nro_presupuesto", nroPresupuesto);
+			DataTable tabla2 = new DataTable();
+			tabla2.Load(cmd2.ExecuteReader());
 			cnn.Close();
 
-			return tabla;
+			return tabla2;
 		}
-
 		public DataTable FiltrarNroPresupuesto(int nroPresupuesto)
 		{
 			DataTable tabla = new DataTable();
@@ -75,7 +73,6 @@ namespace WinFormCarpinteria.AccesoDatos
 
 			return tabla;
 		}
-
 		public DataTable FiltrarFecha(DateTime fechaDesde, DateTime fechaHasta)
 		{
 			DataTable tabla = new DataTable();
@@ -93,7 +90,6 @@ namespace WinFormCarpinteria.AccesoDatos
 
 			return tabla;
 		}
-
 		public DataTable FiltrarCliente(string cliente)
 		{
 			DataTable tabla = new DataTable();
@@ -109,6 +105,5 @@ namespace WinFormCarpinteria.AccesoDatos
 			cnn.Close();
 			return tabla;
 		}
-
 	}
 }

@@ -18,12 +18,22 @@ namespace WinFormCarpinteria.Servicios
 			dao = factory.CrearPresupuestoDao();
 			daoL = factory.CrearListadoPresupuestosDao();
 		}
-
+		public bool NuevoPresupuesto(Presupuesto oPresupuesto)
+		{
+			return dao.InsertarPresupuesto(oPresupuesto);
+		}
+		public bool EditarPresupuesto(Presupuesto oPresupuesto)
+		{
+			return dao.EditarPresupuesto(oPresupuesto);
+		}
+		public bool BorrarPresupuesto(int nroPresupuesto)
+		{
+			return dao.BorrarPresupuesto(nroPresupuesto);
+		}
 		public int ProximoPresupuesto()
 		{
 			return dao.ObtenerProximoNumero();
 		}
-
 		public DataTable ObtenerProductos()
 		{
 			DataTable tabla = new DataTable();
@@ -32,33 +42,18 @@ namespace WinFormCarpinteria.Servicios
 			return tabla;
 		}
 
-		public bool NuevoPresupuesto(Presupuesto oPresupuesto)
-		{
-			return dao.InsertarPresupuesto(oPresupuesto);
-		}
-
-		public bool BorrarPresupuesto(int nroPresupuesto)
-		{
-			return dao.BorrarPresupuesto(nroPresupuesto);
-		}
-		public DataTable CargarPresupuestoEdicion(int nroPresupuesto)
-		{
-			return daoL.CargarPresupuestoEdicion(nroPresupuesto);
-		}
-		public DataTable CargarDetallesPresupuestoEdicion(int nroPresupuesto)
-		{
-			return daoL.CargarDetallesPresupuestoEdicion(nroPresupuesto);
-		}
-		public bool EditarPresupuesto(Presupuesto oPresupuesto)
-		{
-			return dao.EditarPresupuesto(oPresupuesto);
-		}
-
 		public DataTable ListarPresupuestos()
 		{
-			return daoL.ListarPresupuestos();
+			return daoL.ConsultarPresupuestos();
 		}
-
+		public DataTable CargarEditarPresupuesto(int nroPresupuesto)
+		{
+			return daoL.ConsultarPresupuestoEdicion(nroPresupuesto);
+		}
+		public DataTable CargarDetallesEditarPresupuesto(int nroPresupuesto)
+		{
+			return daoL.ConsultarDetallesPresupuestoEdicion(nroPresupuesto);
+		}
 		public DataTable FiltrarNroPresupuesto(int nroPresupuesto)
 		{
 			return daoL.FiltrarNroPresupuesto(nroPresupuesto);

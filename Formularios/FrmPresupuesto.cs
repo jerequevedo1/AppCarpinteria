@@ -49,20 +49,7 @@ namespace WinFormCarpinteria.Formularios
 				txtDescuento.Text = "0";
 				txtCantidad.Text = "1";
 			}
-		}
-
-		private void CargarProductos()
-		{
-			DataTable tabla = gestor.ObtenerProductos();
-
-			if (tabla !=null)
-			{
-				cboProducto.DataSource = tabla;
-				cboProducto.ValueMember = tabla.Columns[0].ColumnName;
-				cboProducto.DisplayMember = tabla.Columns[1].ColumnName;
-			}
-			
-		}
+		}		
 		private void btnAgregar_Click(object sender, EventArgs e)
 		{
 			if (cboProducto.Text.Equals(string.Empty))
@@ -99,7 +86,6 @@ namespace WinFormCarpinteria.Formularios
 
 			CalcularTotales();
 		}
-
 		private void dgvDetalles_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			if (dgvDetalles.CurrentCell.ColumnIndex == 4)
@@ -109,18 +95,10 @@ namespace WinFormCarpinteria.Formularios
 				CalcularTotales();
 			}
 		}
-		private void CalcularTotales()
-		{
-			txtSubtotal.Text = oPresupuesto.CalcularTotal().ToString();
-			double desc = oPresupuesto.CalcularTotal() * Convert.ToDouble(txtDescuento.Text) / 100;
-			txtTotal.Text = (oPresupuesto.CalcularTotal() - desc).ToString();
-		}
-
 		private void btnCancelar_Click(object sender, EventArgs e)
 		{
 			Close();
 		}
-
 		private void btnAceptar_Click(object sender, EventArgs e)
 		{
 			if (txtCliente.Text=="")
@@ -139,6 +117,7 @@ namespace WinFormCarpinteria.Formularios
 			CalcularTotales();
 			GuardarPresupuesto();
 		}
+
 		private void GuardarPresupuesto()
 		{
 			oPresupuesto.Fecha = Convert.ToDateTime(txtFecha.Text);
@@ -173,13 +152,29 @@ namespace WinFormCarpinteria.Formularios
 
 			
 		}
+		private void CargarProductos()
+		{
+			DataTable tabla = gestor.ObtenerProductos();
 
-		internal void HabilitarEdicion(EdicionPresupuesto edicion)
+			if (tabla != null)
+			{
+				cboProducto.DataSource = tabla;
+				cboProducto.ValueMember = tabla.Columns[0].ColumnName;
+				cboProducto.DisplayMember = tabla.Columns[1].ColumnName;
+			}
+
+		}
+		private void CalcularTotales()
+		{
+			txtSubtotal.Text = oPresupuesto.CalcularTotal().ToString();
+			double desc = oPresupuesto.CalcularTotal() * Convert.ToDouble(txtDescuento.Text) / 100;
+			txtTotal.Text = (oPresupuesto.CalcularTotal() - desc).ToString();
+		}
+		public void HabilitarEdicion(EdicionPresupuesto edicion)
 		{
 			oEdicion = edicion;
 		}
-
-		internal void CargarEdicionPresupuesto(int nroPresupuesto)
+		public void CargarEdicionPresupuesto(int nroPresupuesto)
 		{
 			Text = "Editar Presupuesto";
 			CargarProductos();
@@ -187,14 +182,14 @@ namespace WinFormCarpinteria.Formularios
 			lblNroPresupuesto.Text += nroPresupuesto;
 			oPresupuesto.PresupuestoNro = nroPresupuesto;
 
-			DataTable tabla = gestor.CargarPresupuestoEdicion(nroPresupuesto);
+			DataTable tabla = gestor.CargarEditarPresupuesto(nroPresupuesto);
 
 			txtFecha.Text = tabla.Rows[0][1].ToString();
 			txtCliente.Text = tabla.Rows[0][2].ToString();
 			txtDescuento.Text = tabla.Rows[0][3].ToString();
 			txtCantidad.Text = "1";
 
-			DataTable tabla2 = gestor.CargarDetallesPresupuestoEdicion(nroPresupuesto);
+			DataTable tabla2 = gestor.CargarDetallesEditarPresupuesto(nroPresupuesto);
 
 			dgvDetalles.Rows.Clear();
 			for (int i = 0; i < tabla2.Rows.Count; i++)
@@ -213,7 +208,6 @@ namespace WinFormCarpinteria.Formularios
 
 			CalcularTotales();
 		}
-
 		public void HabilitarConsulta(ModoConsulta consulta)
 		{
 			oConsulta = consulta;
@@ -228,5 +222,6 @@ namespace WinFormCarpinteria.Formularios
 				dgvDetalles.Enabled = false;
 			}
 		}
+
 	}
 }
