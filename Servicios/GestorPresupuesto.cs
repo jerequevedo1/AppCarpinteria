@@ -48,11 +48,11 @@ namespace WinFormCarpinteria.Servicios
 		}
 		public DataTable CargarEditarPresupuesto(int nroPresupuesto)
 		{
-			return daoL.ConsultarPresupuestoEdicion(nroPresupuesto);
+			return daoL.ConsultarPresupuestoEditar(nroPresupuesto);
 		}
 		public DataTable CargarDetallesEditarPresupuesto(int nroPresupuesto)
 		{
-			return daoL.ConsultarDetallesPresupuestoEdicion(nroPresupuesto);
+			return daoL.ConsultarDetallesPresupuestoEditar(nroPresupuesto);
 		}
 		public DataTable FiltrarNroPresupuesto(int nroPresupuesto)
 		{
