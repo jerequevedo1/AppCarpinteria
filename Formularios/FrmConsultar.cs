@@ -36,30 +36,48 @@ namespace WinFormCarpinteria.Formularios
 		}
 		private void btnFiltrar_Click(object sender, EventArgs e)
 		{
+			int nroPresup=0;
+			string cliente=string.Empty;
+			DateTime fechaDesde=DateTime.Today;
+			DateTime fechaHasta=DateTime.Today;
 			//validar antes que el campo filtro tenga datos
-			if (txtFiltro.Text.Equals(string.Empty) && cboFiltro.SelectedIndex != 1)
+			if (txtFiltro.Text.Equals(string.Empty))
 			{
-				dgvConsultar.Rows.Clear();
-				ConsultarPresupuestos();
-				return;
+
+				if (cboFiltro.SelectedIndex != 0 && cboFiltro.SelectedIndex != 4)
+				{
+					MessageBox.Show("Debe ingresar parametros", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					return;
+				}
 			}
+			else
+			{
+				nroPresup = int.Parse(txtFiltro.Text);
+				cliente = txtFiltro.Text;
+				fechaDesde = dtpFechaDesde.Value;
+				fechaHasta = dtpFechaHasta.Value;
+			}
+
+			
 			List<Presupuesto> lst = new List<Presupuesto>();
-			int nroPresup = int.Parse(txtFiltro.Text);
-			string cliente = txtFiltro.Text;
-			DateTime fechaDesde = dtpFechaDesde.Value;
-			DateTime fechaHasta = dtpFechaHasta.Value;
+			
 
 			switch (cboFiltro.SelectedIndex)
 			{
 				case 0:
-					lst = gestor.FiltrarNroPresupuesto(nroPresup);
-					
+					lst = gestor.CargarPresupuestos();
 					break;
 				case 1:
-					lst = gestor.FiltrarFecha(fechaDesde,fechaHasta);
+					lst = gestor.FiltrarNroPresupuesto(nroPresup);
 					break;
 				case 2:
+					lst = gestor.FiltrarFecha(fechaDesde,fechaHasta);
+					break;
+				case 3:
 					lst = gestor.FiltrarCliente(cliente);
+					break;
+				case 4:
+					lst = gestor.FiltrarInactivos();
 					break;
 			}
 
@@ -72,7 +90,7 @@ namespace WinFormCarpinteria.Formularios
 		private void cboFiltro_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			txtFiltro.Text = string.Empty;
-			if (cboFiltro.SelectedIndex==1)
+			if (cboFiltro.SelectedIndex==2)
 			{
 				dtpFechaDesde.Enabled = true;
 				dtpFechaHasta.Enabled = true;
@@ -84,6 +102,12 @@ namespace WinFormCarpinteria.Formularios
 				dtpFechaDesde.Enabled = false;
 				dtpFechaHasta.Enabled = false;
 				txtFiltro.Enabled = true;
+			}
+			if (cboFiltro.SelectedIndex == 4 || cboFiltro.SelectedIndex == 0)
+			{
+				dtpFechaDesde.Enabled = false;
+				dtpFechaHasta.Enabled = false;
+				txtFiltro.Enabled = false;
 			}
 		}
 		private void btnEliminarFiltro_Click(object sender, EventArgs e)
@@ -144,7 +168,7 @@ namespace WinFormCarpinteria.Formularios
 
 		private void CargarTiposFiltros()
 		{
-			string[] tiposFiltros = new string[] { "Numero Presupuesto", "Fecha", "Cliente" };
+			string[] tiposFiltros = new string[] { "Todo","Numero Presupuesto", "Fecha", "Cliente","Inactivos" };
 			cboFiltro.Items.Clear();
 			cboFiltro.Items.AddRange(tiposFiltros);
 			cboFiltro.SelectedIndex = 0;

@@ -16,5 +16,7 @@ namespace WinFormCarpinteria.AccesoDatos
 		List<Presupuesto> ConsultarPresupuestoNroPresupuesto(int nroPresupuesto);
 		List<Presupuesto> ConsultarPresupuestoFecha(DateTime fechaDesde, DateTime fechaHasta);
 		List<Presupuesto> ConsultarPresupuestoCliente(string cliente);
+		List<Presupuesto> ConsultarPresupuestoInactivo();
+		List<Presupuesto> ConsultarPresupuestoConInactivo();
 	}
 }

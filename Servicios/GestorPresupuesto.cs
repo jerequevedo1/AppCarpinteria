@@ -57,5 +57,13 @@ namespace WinFormCarpinteria.Servicios
 		{
 			return dao.ConsultarPresupuestoCliente(cliente);
 		}
+		public List<Presupuesto> FiltrarInactivos()
+		{
+			return dao.ConsultarPresupuestoInactivo();
+		}
+		public List<Presupuesto> CargarPresupConInactivos()
+		{
+			return dao.ConsultarPresupuestoConInactivo();
+		}
 	}
 }

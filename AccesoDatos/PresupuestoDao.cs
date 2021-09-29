@@ -141,34 +141,25 @@ namespace WinFormCarpinteria.AccesoDatos
 		}
 		public bool BorrarPresupuesto(int nroPresupuesto)
 		{
-			bool resultado = true;
 			SqlConnection cnn = new SqlConnection();
 			SqlTransaction trans = null;
+			bool resultado = true;
+			try 
+			{ 
+			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+			cnn.Open();
+			trans = cnn.BeginTransaction();
+			SqlCommand cmd = new SqlCommand();
+			cmd.Connection = cnn;
+			cmd.Transaction = trans;
+			cmd.CommandText = "SP_BAJA_PRESUPUESTO";
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.Parameters.AddWithValue("@nroPresupuesto", nroPresupuesto);
+			cmd.ExecuteNonQuery();
 
-			try
-			{
-				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-				cnn.Open();
-				trans = cnn.BeginTransaction();
-				SqlCommand cmd = new SqlCommand();
-				cmd.Connection = cnn;
-				cmd.Transaction = trans;
-				cmd.CommandText = "SP_BORRAR_DETALLES";
-				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.Parameters.AddWithValue("@nroPresupuesto", nroPresupuesto);
-				cmd.ExecuteNonQuery();
-
-				SqlCommand cmd2 = new SqlCommand();
-				cmd2.Connection = cnn;
-				cmd2.Transaction = trans;
-				cmd2.CommandText = "SP_BORRAR_PRESUPUESTO";
-				cmd2.CommandType = CommandType.StoredProcedure;
-				cmd2.Parameters.AddWithValue("@nroPresupuesto", nroPresupuesto);
-				cmd2.ExecuteNonQuery();
-
-				trans.Commit();
+			trans.Commit();
 			}
-			catch (Exception)
+			catch
 			{
 				trans.Rollback();
 				resultado = false;
@@ -335,6 +326,44 @@ namespace WinFormCarpinteria.AccesoDatos
 			cmd.Parameters.AddWithValue("@cliente", cliente);
 			tabla.Load(cmd.ExecuteReader());
 			cnn.Close();
+
+			foreach (DataRow row in tabla.Rows)
+			{
+				Presupuesto oPresupuesto = new Presupuesto();
+				oPresupuesto.Cliente = row["cliente"].ToString();
+				oPresupuesto.Fecha = Convert.ToDateTime(row["fecha"].ToString());
+				oPresupuesto.Descuento = Convert.ToDouble(row["descuento"].ToString());
+				oPresupuesto.PresupuestoNro = Convert.ToInt32(row["presupuesto_nro"].ToString());
+				oPresupuesto.Total = Convert.ToDouble(row["total"].ToString());
+
+				lst.Add(oPresupuesto);
+			}
+
+			return lst;
+		}
+		public List<Presupuesto> ConsultarPresupuestoInactivo()
+		{
+			List<Presupuesto> lst = new List<Presupuesto>();
+			DataTable tabla = HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRESUPUESTOS_INACTIVOS");
+
+			foreach (DataRow row in tabla.Rows)
+			{
+				Presupuesto oPresupuesto = new Presupuesto();
+				oPresupuesto.Cliente = row["cliente"].ToString();
+				oPresupuesto.Fecha = Convert.ToDateTime(row["fecha"].ToString());
+				oPresupuesto.Descuento = Convert.ToDouble(row["descuento"].ToString());
+				oPresupuesto.PresupuestoNro = Convert.ToInt32(row["presupuesto_nro"].ToString());
+				oPresupuesto.Total = Convert.ToDouble(row["total"].ToString());
+
+				lst.Add(oPresupuesto);
+			}
+
+			return lst;
+		}
+		public List<Presupuesto> ConsultarPresupuestoConInactivo()
+		{
+			List<Presupuesto> lst = new List<Presupuesto>();
+			DataTable tabla = HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRESUPUESTOS_CON_INACTIVOS");
 
 			foreach (DataRow row in tabla.Rows)
 			{
