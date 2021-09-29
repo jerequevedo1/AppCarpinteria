@@ -15,6 +15,13 @@ namespace WinFormCarpinteria
 			Precio = precio;
 			Activo = true;
 		}
+		public Producto()
+		{
+			IdProducto = 0;
+			NProducto = string.Empty;
+			Precio = 0;
+			Activo = true;
+		}
 		public int IdProducto { get; set; }
 		public string NProducto { get; set; }
 		public double Precio { get; set; }

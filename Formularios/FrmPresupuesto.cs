@@ -34,6 +34,7 @@ namespace WinFormCarpinteria.Formularios
 			}
 			if (modo.Equals(Accion.Update))
 			{
+				Text = "Editar Presupuesto";
 				CargarPresupuesto(nro);
 			}
 		}
@@ -51,11 +52,11 @@ namespace WinFormCarpinteria.Formularios
 			if (modo.Equals(Accion.Create))
 			{
 				lblNroPresupuesto.Text += gestor.ProximoPresupuesto();
-				CargarProductos();
 				txtFecha.Text = DateTime.Today.ToString("dd/MM/yyyy");
 				txtCliente.Text = "Consumidor Final";
 				txtDescuento.Text = "0";
 				txtCantidad.Text = "1";
+				CargarProductos();
 			}
 		}		
 		private void btnAgregar_Click(object sender, EventArgs e)
@@ -180,34 +181,20 @@ namespace WinFormCarpinteria.Formularios
 		}
 		private void CargarPresupuesto(int nroPresupuesto)
 		{
-			Text = "Editar Presupuesto";
 			CargarProductos();
-			cboProducto.DropDownStyle = ComboBoxStyle.DropDownList;
 			lblNroPresupuesto.Text += nroPresupuesto;
-			oPresupuesto.PresupuestoNro = nroPresupuesto;
+			oPresupuesto = gestor.CargarPresupuesto(nroPresupuesto);
 
-			DataTable tabla = gestor.CargarEditarPresupuesto(nroPresupuesto);
-
-			txtFecha.Text = tabla.Rows[0][1].ToString();
-			txtCliente.Text = tabla.Rows[0][2].ToString();
-			txtDescuento.Text = tabla.Rows[0][3].ToString();
+			txtFecha.Text = oPresupuesto.Fecha.ToString();
+			txtCliente.Text = oPresupuesto.Cliente;
+			txtDescuento.Text = oPresupuesto.Descuento.ToString();
 			txtCantidad.Text = "1";
 
-			DataTable tabla2 = gestor.CargarDetallesEditarPresupuesto(nroPresupuesto);
-
 			dgvDetalles.Rows.Clear();
-			for (int i = 0; i < tabla2.Rows.Count; i++)
+
+			foreach (DetallePresupuesto oDetalle in oPresupuesto.Detalles)
 			{
-				int prod = Convert.ToInt32(tabla2.Rows[i][0].ToString());
-				string nom = tabla2.Rows[i][1].ToString();
-				double pre = Convert.ToDouble(tabla2.Rows[i][2].ToString());
-				int cant = Convert.ToInt32(tabla2.Rows[i][3].ToString());
-
-				Producto p = new Producto(prod, nom, pre);
-				DetallePresupuesto detalle = new DetallePresupuesto(p, cant);
-
-				oPresupuesto.AgregarDetalle(detalle);
-				dgvDetalles.Rows.Add(new object[] { prod, nom, pre, cant });
+				dgvDetalles.Rows.Add(new object[] { oDetalle.Producto.NProducto, oDetalle.Producto.Precio, oDetalle.Cantidad, oDetalle.CalcularSubtotal()}); ;
 			}
 
 			CalcularTotales();
@@ -222,6 +209,5 @@ namespace WinFormCarpinteria.Formularios
 				btnAgregar.Enabled = false;
 				dgvDetalles.Enabled = false;
 		}
-
 	}
 }

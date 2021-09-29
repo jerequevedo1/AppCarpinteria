@@ -87,6 +87,17 @@ AS
 UPDATE T_DETALLES_PRESUPUESTO
 SET detalle_nro=@detalle_nro,id_producto=@id_producto,cantidad=@cantidad
 WHERE presupuesto_nro=@nro_presupuesto
+------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[SP_CONSULTAR_PRESUPUESTO_POR_ID]
+	@nro int	
+AS
+BEGIN
+	SELECT *
+	FROM T_PRESUPUESTOS t, T_DETALLES_PRESUPUESTO t1, T_PRODUCTOS t2
+	WHERE t.presupuesto_nro = t1.presupuesto_nro
+	AND t1.id_producto = t2.id_producto
+	AND t.presupuesto_nro = @nro;
+END
 
 select * from T_DETALLES_PRESUPUESTO
 select * from T_PRESUPUESTOS

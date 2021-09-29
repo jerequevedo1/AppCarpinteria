@@ -46,14 +46,18 @@ namespace WinFormCarpinteria.Servicios
 		{
 			return daoL.ConsultarPresupuestos();
 		}
-		public DataTable CargarEditarPresupuesto(int nroPresupuesto)
+		public Presupuesto CargarPresupuesto(int nroPresupuesto)
 		{
-			return daoL.ConsultarPresupuestoEditar(nroPresupuesto);
+			return daoL.ConsultarUnPresupuesto(nroPresupuesto);
 		}
-		public DataTable CargarDetallesEditarPresupuesto(int nroPresupuesto)
-		{
-			return daoL.ConsultarDetallesPresupuestoEditar(nroPresupuesto);
-		}
+		//public DataTable CargarEditarPresupuesto(int nroPresupuesto)
+		//{
+		//	return daoL.ConsultarPresupuestoEditar(nroPresupuesto);
+		//}
+		//public DataTable CargarDetallesEditarPresupuesto(int nroPresupuesto)
+		//{
+		//	return daoL.ConsultarDetallesPresupuestoEditar(nroPresupuesto);
+		//}
 		public DataTable FiltrarNroPresupuesto(int nroPresupuesto)
 		{
 			return daoL.FiltrarNroPresupuesto(nroPresupuesto);

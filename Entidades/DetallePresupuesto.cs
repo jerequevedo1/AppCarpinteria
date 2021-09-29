@@ -13,7 +13,11 @@ namespace WinFormCarpinteria
 			Producto = producto;
 			Cantidad = cantidad;
 		}
-
+		public DetallePresupuesto()
+		{
+			Producto = null;
+			Cantidad = 0;
+		}
 		public Producto Producto { get; set; }
 		public int Cantidad { get; set; }
 
