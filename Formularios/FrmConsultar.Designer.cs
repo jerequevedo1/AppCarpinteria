@@ -47,6 +47,10 @@ namespace WinFormCarpinteria.Formularios
 			this.btnNuevoP = new System.Windows.Forms.Button();
 			this.lblFechaDesde = new System.Windows.Forms.Label();
 			this.lblFechaHasta = new System.Windows.Forms.Label();
+			this.chkInactivos = new System.Windows.Forms.CheckBox();
+			this.btnEditar = new System.Windows.Forms.Button();
+			this.btnBorrar = new System.Windows.Forms.Button();
+			this.lblParametro = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.dgvConsultar)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -62,7 +66,7 @@ namespace WinFormCarpinteria.Formularios
             this.cTotal,
             this.cAccion,
             this.cAccion2});
-			this.dgvConsultar.Location = new System.Drawing.Point(12, 137);
+			this.dgvConsultar.Location = new System.Drawing.Point(12, 172);
 			this.dgvConsultar.Name = "dgvConsultar";
 			this.dgvConsultar.ReadOnly = true;
 			this.dgvConsultar.RowHeadersVisible = false;
@@ -118,7 +122,7 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			// btnCancelar
 			// 
-			this.btnCancelar.Location = new System.Drawing.Point(482, 569);
+			this.btnCancelar.Location = new System.Drawing.Point(482, 604);
 			this.btnCancelar.Name = "btnCancelar";
 			this.btnCancelar.Size = new System.Drawing.Size(75, 26);
 			this.btnCancelar.TabIndex = 1;
@@ -141,15 +145,15 @@ namespace WinFormCarpinteria.Formularios
 			this.cboFiltro.FormattingEnabled = true;
 			this.cboFiltro.Location = new System.Drawing.Point(67, 25);
 			this.cboFiltro.Name = "cboFiltro";
-			this.cboFiltro.Size = new System.Drawing.Size(226, 21);
+			this.cboFiltro.Size = new System.Drawing.Size(408, 21);
 			this.cboFiltro.TabIndex = 3;
 			this.cboFiltro.SelectedIndexChanged += new System.EventHandler(this.cboFiltro_SelectedIndexChanged);
 			// 
 			// txtFiltro
 			// 
-			this.txtFiltro.Location = new System.Drawing.Point(299, 25);
+			this.txtFiltro.Location = new System.Drawing.Point(80, 64);
 			this.txtFiltro.Name = "txtFiltro";
-			this.txtFiltro.Size = new System.Drawing.Size(176, 20);
+			this.txtFiltro.Size = new System.Drawing.Size(200, 20);
 			this.txtFiltro.TabIndex = 4;
 			// 
 			// btnFiltrar
@@ -164,7 +168,7 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			// btnEliminarFiltro
 			// 
-			this.btnEliminarFiltro.Location = new System.Drawing.Point(12, 572);
+			this.btnEliminarFiltro.Location = new System.Drawing.Point(12, 607);
 			this.btnEliminarFiltro.Name = "btnEliminarFiltro";
 			this.btnEliminarFiltro.Size = new System.Drawing.Size(105, 23);
 			this.btnEliminarFiltro.TabIndex = 6;
@@ -174,32 +178,32 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			// dtpFechaDesde
 			// 
-			this.dtpFechaDesde.Location = new System.Drawing.Point(67, 64);
+			this.dtpFechaDesde.Location = new System.Drawing.Point(80, 90);
 			this.dtpFechaDesde.Name = "dtpFechaDesde";
 			this.dtpFechaDesde.Size = new System.Drawing.Size(200, 20);
 			this.dtpFechaDesde.TabIndex = 7;
 			// 
 			// dtpFechaHasta
 			// 
-			this.dtpFechaHasta.Location = new System.Drawing.Point(356, 64);
+			this.dtpFechaHasta.Location = new System.Drawing.Point(355, 90);
 			this.dtpFechaHasta.Name = "dtpFechaHasta";
 			this.dtpFechaHasta.Size = new System.Drawing.Size(200, 20);
 			this.dtpFechaHasta.TabIndex = 8;
 			// 
 			// btnNuevoP
 			// 
-			this.btnNuevoP.Location = new System.Drawing.Point(15, 108);
+			this.btnNuevoP.Location = new System.Drawing.Point(12, 138);
 			this.btnNuevoP.Name = "btnNuevoP";
-			this.btnNuevoP.Size = new System.Drawing.Size(122, 23);
+			this.btnNuevoP.Size = new System.Drawing.Size(75, 26);
 			this.btnNuevoP.TabIndex = 9;
-			this.btnNuevoP.Text = "Nuevo Presupuesto";
+			this.btnNuevoP.Text = "Nuevo";
 			this.btnNuevoP.UseVisualStyleBackColor = true;
 			this.btnNuevoP.Click += new System.EventHandler(this.btnNuevoP_Click);
 			// 
 			// lblFechaDesde
 			// 
 			this.lblFechaDesde.AutoSize = true;
-			this.lblFechaDesde.Location = new System.Drawing.Point(17, 68);
+			this.lblFechaDesde.Location = new System.Drawing.Point(9, 94);
 			this.lblFechaDesde.Name = "lblFechaDesde";
 			this.lblFechaDesde.Size = new System.Drawing.Size(44, 13);
 			this.lblFechaDesde.TabIndex = 10;
@@ -208,17 +212,58 @@ namespace WinFormCarpinteria.Formularios
 			// lblFechaHasta
 			// 
 			this.lblFechaHasta.AutoSize = true;
-			this.lblFechaHasta.Location = new System.Drawing.Point(306, 68);
+			this.lblFechaHasta.Location = new System.Drawing.Point(305, 94);
 			this.lblFechaHasta.Name = "lblFechaHasta";
 			this.lblFechaHasta.Size = new System.Drawing.Size(41, 13);
 			this.lblFechaHasta.TabIndex = 11;
 			this.lblFechaHasta.Text = "Hasta: ";
 			// 
+			// chkInactivos
+			// 
+			this.chkInactivos.AutoSize = true;
+			this.chkInactivos.Location = new System.Drawing.Point(456, 147);
+			this.chkInactivos.Name = "chkInactivos";
+			this.chkInactivos.Size = new System.Drawing.Size(99, 17);
+			this.chkInactivos.TabIndex = 12;
+			this.chkInactivos.Text = "Incluir inactivos";
+			this.chkInactivos.UseVisualStyleBackColor = true;
+			// 
+			// btnEditar
+			// 
+			this.btnEditar.Location = new System.Drawing.Point(93, 138);
+			this.btnEditar.Name = "btnEditar";
+			this.btnEditar.Size = new System.Drawing.Size(75, 26);
+			this.btnEditar.TabIndex = 13;
+			this.btnEditar.Text = "Editar";
+			this.btnEditar.UseVisualStyleBackColor = true;
+			// 
+			// btnBorrar
+			// 
+			this.btnBorrar.Location = new System.Drawing.Point(174, 138);
+			this.btnBorrar.Name = "btnBorrar";
+			this.btnBorrar.Size = new System.Drawing.Size(75, 26);
+			this.btnBorrar.TabIndex = 14;
+			this.btnBorrar.Text = "Borrar";
+			this.btnBorrar.UseVisualStyleBackColor = true;
+			// 
+			// lblParametro
+			// 
+			this.lblParametro.AutoSize = true;
+			this.lblParametro.Location = new System.Drawing.Point(9, 67);
+			this.lblParametro.Name = "lblParametro";
+			this.lblParametro.Size = new System.Drawing.Size(58, 13);
+			this.lblParametro.TabIndex = 15;
+			this.lblParametro.Text = "Parametro:";
+			// 
 			// FrmConsultar
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(569, 612);
+			this.ClientSize = new System.Drawing.Size(569, 643);
+			this.Controls.Add(this.lblParametro);
+			this.Controls.Add(this.btnBorrar);
+			this.Controls.Add(this.btnEditar);
+			this.Controls.Add(this.chkInactivos);
 			this.Controls.Add(this.lblFechaHasta);
 			this.Controls.Add(this.lblFechaDesde);
 			this.Controls.Add(this.btnNuevoP);
@@ -261,5 +306,9 @@ namespace WinFormCarpinteria.Formularios
 		private System.Windows.Forms.Button btnNuevoP;
 		private System.Windows.Forms.Label lblFechaDesde;
 		private System.Windows.Forms.Label lblFechaHasta;
+		private System.Windows.Forms.CheckBox chkInactivos;
+		private System.Windows.Forms.Button btnEditar;
+		private System.Windows.Forms.Button btnBorrar;
+		private System.Windows.Forms.Label lblParametro;
 	}
 }

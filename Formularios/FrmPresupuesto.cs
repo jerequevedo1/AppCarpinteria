@@ -50,6 +50,7 @@ namespace WinFormCarpinteria.Formularios
 
 		private void FrmNuevoPresupuesto_Load(object sender, EventArgs e)
 		{
+			CargarProductos();
 			if (modo.Equals(Accion.Create))
 			{
 				lblNroPresupuesto.Text += gestor.ProximoPresupuesto();
@@ -57,7 +58,6 @@ namespace WinFormCarpinteria.Formularios
 				txtCliente.Text = "Consumidor Final";
 				txtDescuento.Text = "0";
 				txtCantidad.Text = "1";
-				CargarProductos();
 			}
 		}		
 		private void btnAgregar_Click(object sender, EventArgs e)
@@ -177,7 +177,6 @@ namespace WinFormCarpinteria.Formularios
 		}
 		private void CargarPresupuesto(int nroPresupuesto)
 		{
-			CargarProductos();
 			lblNroPresupuesto.Text += nroPresupuesto;
 			oPresupuesto = gestor.CargarPresupuesto(nroPresupuesto);
 

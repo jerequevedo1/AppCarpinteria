@@ -40,7 +40,7 @@ namespace WinFormCarpinteria.Formularios
 			string cliente=string.Empty;
 			DateTime fechaDesde=DateTime.Today;
 			DateTime fechaHasta=DateTime.Today;
-			//validar antes que el campo filtro tenga datos
+
 			if (txtFiltro.Text.Equals(string.Empty))
 			{
 
@@ -58,9 +58,7 @@ namespace WinFormCarpinteria.Formularios
 				fechaHasta = dtpFechaHasta.Value;
 			}
 
-			
 			List<Presupuesto> lst = new List<Presupuesto>();
-			
 
 			switch (cboFiltro.SelectedIndex)
 			{
