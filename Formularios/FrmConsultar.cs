@@ -43,7 +43,7 @@ namespace WinFormCarpinteria.Formularios
 				ConsultarPresupuestos();
 				return;
 			}
-			DataTable tabla = new DataTable();
+			List<Presupuesto> lst = new List<Presupuesto>();
 			int nroPresup = int.Parse(txtFiltro.Text);
 			string cliente = txtFiltro.Text;
 			DateTime fechaDesde = dtpFechaDesde.Value;
@@ -52,34 +52,21 @@ namespace WinFormCarpinteria.Formularios
 			switch (cboFiltro.SelectedIndex)
 			{
 				case 0:
-					tabla = gestor.FiltrarNroPresupuesto(nroPresup);
+					lst = gestor.FiltrarNroPresupuesto(nroPresup);
 					
 					break;
 				case 1:
-					tabla = gestor.FiltrarFecha(fechaDesde,fechaHasta);
+					lst = gestor.FiltrarFecha(fechaDesde,fechaHasta);
 					break;
 				case 2:
-					tabla = gestor.FiltrarCliente(cliente);
+					lst = gestor.FiltrarCliente(cliente);
 					break;
 			}
 
 			dgvConsultar.Rows.Clear();
-			//for (int i = 0; i < tabla.Rows.Count; i++)
-			//{
-			//	dgvConsultar.Rows.Add(tabla.Rows[i]["presupuesto_nro"], tabla.Rows[i][1], tabla.Rows[i][2], tabla.Rows[i][5]);
-			//}
-			DataTableReader lector = tabla.CreateDataReader();
-			while (lector.Read())
+			foreach (Presupuesto item in lst)
 			{
-				Presupuesto p = new Presupuesto();
-				p.PresupuestoNro = lector.GetInt32(0);
-				p.Fecha = Convert.ToDateTime(lector.GetString(1));
-				if (!lector.IsDBNull(2)) p.Cliente = lector.GetString(2);
-				if (!lector.IsDBNull(3)) p.Descuento = Convert.ToDouble(lector.GetValue(3));
-				p.Total = Convert.ToDouble(lector.GetValue(5));
-
-				presupuestos.Agregar(p);
-				dgvConsultar.Rows.Add(new object[] { p.PresupuestoNro, p.Fecha.ToString("dd/MM/yyyy"), p.Cliente, p.Total });
+				dgvConsultar.Rows.Add(new object[] { item.PresupuestoNro, item.Fecha.ToString("dd/MM/yyyy"), item.Cliente, item.Total });
 			}
 		}
 		private void cboFiltro_SelectedIndexChanged(object sender, EventArgs e)
@@ -164,22 +151,12 @@ namespace WinFormCarpinteria.Formularios
 		}
 		private void ConsultarPresupuestos()
 		{
-			DataTable tabla = new DataTable();
-			tabla = gestor.ListarPresupuestos();
-
-			DataTableReader lector = tabla.CreateDataReader();
+			List<Presupuesto> lst = new List<Presupuesto>();
+			lst = gestor.CargarPresupuestos();
 			dgvConsultar.Rows.Clear();
-			while (lector.Read())
+			foreach (Presupuesto item in lst)
 			{
-				Presupuesto p = new Presupuesto();
-				p.PresupuestoNro = lector.GetInt32(0);
-				p.Fecha = Convert.ToDateTime(lector.GetString(1));
-				if (!lector.IsDBNull(2)) p.Cliente = lector.GetString(2);
-				if (!lector.IsDBNull(3)) p.Descuento = Convert.ToDouble(lector.GetValue(3));
-				p.Total = Convert.ToDouble(lector.GetValue(5));
-
-				presupuestos.Agregar(p);
-				dgvConsultar.Rows.Add(new object[] { p.PresupuestoNro, p.Fecha.ToString("dd/MM/yyyy"), p.Cliente, p.Total });
+				dgvConsultar.Rows.Add(new object[] { item.PresupuestoNro, item.Fecha.ToString("dd/MM/yyyy"), item.Cliente, item.Total });
 			}
 		}
 	}

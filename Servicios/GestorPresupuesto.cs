@@ -11,12 +11,10 @@ namespace WinFormCarpinteria.Servicios
 	class GestorPresupuesto
 	{
 		private IPresupuestoDao dao;
-		private IListadoPresupuestos daoL;
 
 		public GestorPresupuesto(AbstractDaoFactory factory)
 		{
 			dao = factory.CrearPresupuestoDao();
-			daoL = factory.CrearListadoPresupuestosDao();
 		}
 		public bool NuevoPresupuesto(Presupuesto oPresupuesto)
 		{
@@ -39,25 +37,25 @@ namespace WinFormCarpinteria.Servicios
 			return dao.ConsultarProductos();
 		}
 
-		public DataTable ListarPresupuestos()
+		public List<Presupuesto> CargarPresupuestos()
 		{
-			return daoL.ConsultarPresupuestos();
+			return dao.ConsultarPresupuestos();
 		}
 		public Presupuesto CargarPresupuesto(int nroPresupuesto)
 		{
-			return daoL.ConsultarUnPresupuesto(nroPresupuesto);
+			return dao.ConsultarUnPresupuesto(nroPresupuesto);
 		}
-		public DataTable FiltrarNroPresupuesto(int nroPresupuesto)
+		public List<Presupuesto> FiltrarNroPresupuesto(int nroPresupuesto)
 		{
-			return daoL.ConsultarPresupuestoNroPresupuesto(nroPresupuesto);
+			return dao.ConsultarPresupuestoNroPresupuesto(nroPresupuesto);
 		}
-		public DataTable FiltrarFecha(DateTime fechaDesde, DateTime fechaHasta)
+		public List<Presupuesto> FiltrarFecha(DateTime fechaDesde, DateTime fechaHasta)
 		{
-			return daoL.ConsultarPresupuestoFecha(fechaDesde,fechaHasta);
+			return dao.ConsultarPresupuestoFecha(fechaDesde,fechaHasta);
 		}
-		public DataTable FiltrarCliente(string cliente)
+		public List<Presupuesto> FiltrarCliente(string cliente)
 		{
-			return daoL.ConsultarPresupuestoCliente(cliente);
+			return dao.ConsultarPresupuestoCliente(cliente);
 		}
 	}
 }
