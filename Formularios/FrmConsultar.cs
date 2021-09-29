@@ -80,10 +80,7 @@ namespace WinFormCarpinteria.Formularios
 			}
 
 			dgvConsultar.Rows.Clear();
-			foreach (Presupuesto item in lst)
-			{
-				dgvConsultar.Rows.Add(new object[] { item.PresupuestoNro, item.Fecha.ToString("dd/MM/yyyy"), item.Cliente, item.Total });
-			}
+			CargarGrilla(lst);
 		}
 		private void cboFiltro_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -121,13 +118,19 @@ namespace WinFormCarpinteria.Formularios
 		}
 		private void dgvConsultar_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
-
 			if (dgvConsultar.CurrentCell.ColumnIndex==5)
 			{
-				dgvConsultar_CellDoubleClick(null, null);
+				int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
+				FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto(Accion.Read, nroPresupuesto);
+				ofrmPresupuesto.ShowDialog();
 			}
 
+		}
+		private void dgvConsultar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells["cNroPresup"].Value.ToString());
+			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto(Accion.Read, nroPresupuesto);
+			ofrmPresupuesto.ShowDialog();
 		}
 		private void btnNuevoP_Click(object sender, EventArgs e)
 		{
@@ -135,31 +138,6 @@ namespace WinFormCarpinteria.Formularios
 			ofrmPresupuesto.ShowDialog();
 			ConsultarPresupuestos();
 		}
-		private void dgvConsultar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-		{
-			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells["cNroPresup"].Value.ToString());
-			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto(Accion.Read,nroPresupuesto);
-			ofrmPresupuesto.ShowDialog();
-		}
-
-		private void CargarTiposFiltros()
-		{
-			string[] tiposFiltros = new string[] { "Todo","Numero Presupuesto", "Fecha", "Cliente","Inactivos" };
-			cboFiltro.Items.Clear();
-			cboFiltro.Items.AddRange(tiposFiltros);
-			cboFiltro.SelectedIndex = 0;
-		}
-		private void ConsultarPresupuestos()
-		{
-			List<Presupuesto> lst = new List<Presupuesto>();
-			lst = gestor.CargarPresupuestos();
-			dgvConsultar.Rows.Clear();
-			foreach (Presupuesto item in lst)
-			{
-				dgvConsultar.Rows.Add(new object[] { item.PresupuestoNro, item.Fecha.ToString("dd/MM/yyyy"), item.Cliente,item.Descuento+" %", "$ "+item.Total });
-			}
-		}
-
 		private void btnEditar_Click(object sender, EventArgs e)
 		{
 			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
@@ -168,7 +146,6 @@ namespace WinFormCarpinteria.Formularios
 
 			ConsultarPresupuestos();
 		}
-
 		private void btnBorrar_Click(object sender, EventArgs e)
 		{
 			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
@@ -187,5 +164,28 @@ namespace WinFormCarpinteria.Formularios
 				}
 			}
 		}
+
+		private void CargarTiposFiltros()
+		{
+			string[] tiposFiltros = new string[] { "Todo","Numero Presupuesto", "Fecha", "Cliente","Inactivos" };
+			cboFiltro.Items.Clear();
+			cboFiltro.Items.AddRange(tiposFiltros);
+			cboFiltro.SelectedIndex = 0;
+		}
+		private void ConsultarPresupuestos()
+		{
+			List<Presupuesto> lst = new List<Presupuesto>();
+			lst = gestor.CargarPresupuestos();
+			dgvConsultar.Rows.Clear();
+			CargarGrilla(lst);
+		}
+		private void CargarGrilla(List<Presupuesto> lst)
+		{
+			foreach (Presupuesto item in lst)
+			{
+				dgvConsultar.Rows.Add(new object[] { item.PresupuestoNro, item.Fecha.ToString("dd/MM/yyyy"), item.Cliente, item.Descuento + " %", "$ " + item.Total });
+			}
+		}
+
 	}
 }
