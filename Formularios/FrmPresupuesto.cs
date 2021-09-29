@@ -18,29 +18,37 @@ namespace WinFormCarpinteria.Formularios
 		private Presupuesto oPresupuesto;
 		private GestorPresupuesto gestor;
 
-		EdicionPresupuesto oEdicion=EdicionPresupuesto.EdicionNoActiva;
-		ModoConsulta oConsulta;
-		public FrmPresupuesto()
+		private Accion modo;
+
+		public FrmPresupuesto(Accion modo,int nro)
 		{
 			InitializeComponent();
 			oPresupuesto = new Presupuesto();
 			gestor = new GestorPresupuesto(new DaoFactory());
+			this.modo = modo;
+
+			if (modo.Equals(Accion.Read))
+			{
+				HabilitarConsulta();
+				CargarPresupuesto(nro);
+			}
+			if (modo.Equals(Accion.Update))
+			{
+				CargarPresupuesto(nro);
+			}
 		}
 
-		public enum EdicionPresupuesto
+		public enum Accion
 		{
-			EdicionActiva,
-			EdicionNoActiva
-		}
-		public enum ModoConsulta
-		{
-			ConsultaActiva,
-			ConsultaNoActiva
+			Create,
+			Read,
+			Update,
+			Delete
 		}
 
 		private void FrmNuevoPresupuesto_Load(object sender, EventArgs e)
 		{
-			if (oEdicion==EdicionPresupuesto.EdicionNoActiva)
+			if (modo.Equals(Accion.Create))
 			{
 				lblNroPresupuesto.Text += gestor.ProximoPresupuesto();
 				CargarProductos();
@@ -125,7 +133,7 @@ namespace WinFormCarpinteria.Formularios
 			oPresupuesto.Descuento = double.Parse(txtDescuento.Text);
 			oPresupuesto.Total = Convert.ToDouble(txtTotal.Text);
 
-			if (oEdicion==EdicionPresupuesto.EdicionNoActiva)
+			if (modo.Equals(Accion.Create))
 			{
 				if (gestor.NuevoPresupuesto(oPresupuesto))
 				{
@@ -170,11 +178,7 @@ namespace WinFormCarpinteria.Formularios
 			double desc = oPresupuesto.CalcularTotal() * Convert.ToDouble(txtDescuento.Text) / 100;
 			txtTotal.Text = (oPresupuesto.CalcularTotal() - desc).ToString();
 		}
-		public void HabilitarEdicion(EdicionPresupuesto edicion)
-		{
-			oEdicion = edicion;
-		}
-		public void CargarEdicionPresupuesto(int nroPresupuesto)
+		private void CargarPresupuesto(int nroPresupuesto)
 		{
 			Text = "Editar Presupuesto";
 			CargarProductos();
@@ -208,11 +212,8 @@ namespace WinFormCarpinteria.Formularios
 
 			CalcularTotales();
 		}
-		public void HabilitarConsulta(ModoConsulta consulta)
+		private void HabilitarConsulta()
 		{
-			oConsulta = consulta;
-			if (oConsulta==ModoConsulta.ConsultaActiva)
-			{
 				btnAceptar.Hide();
 				txtCliente.Enabled = false;
 				txtDescuento.Enabled = false;
@@ -220,7 +221,6 @@ namespace WinFormCarpinteria.Formularios
 				txtCantidad.Enabled = false;
 				btnAgregar.Enabled = false;
 				dgvDetalles.Enabled = false;
-			}
 		}
 
 	}

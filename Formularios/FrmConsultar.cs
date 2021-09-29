@@ -116,9 +116,7 @@ namespace WinFormCarpinteria.Formularios
 
 			if (dgvConsultar.CurrentCell.ColumnIndex==4)
 			{
-				FrmPresupuesto ofrmPresupuesto= new FrmPresupuesto();
-				ofrmPresupuesto.HabilitarEdicion(EdicionPresupuesto.EdicionActiva);
-				ofrmPresupuesto.CargarEdicionPresupuesto(nroPresupuesto);
+				FrmPresupuesto ofrmPresupuesto= new FrmPresupuesto(Accion.Update,nroPresupuesto);
 				ofrmPresupuesto.ShowDialog();
 
 				ConsultarPresupuestos();
@@ -146,17 +144,14 @@ namespace WinFormCarpinteria.Formularios
 		}
 		private void btnNuevoP_Click(object sender, EventArgs e)
 		{
-			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto();
+			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto(Accion.Create,0);
 			ofrmPresupuesto.ShowDialog();
 			ConsultarPresupuestos();
 		}
 		private void dgvConsultar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
-			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
-			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto();
-			ofrmPresupuesto.HabilitarEdicion(EdicionPresupuesto.EdicionActiva);
-			ofrmPresupuesto.CargarEdicionPresupuesto(nroPresupuesto);
-			ofrmPresupuesto.HabilitarConsulta(ModoConsulta.ConsultaActiva);
+			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells["cNroPresup"].Value.ToString());
+			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto(Accion.Read,nroPresupuesto);
 			ofrmPresupuesto.ShowDialog();
 		}
 
