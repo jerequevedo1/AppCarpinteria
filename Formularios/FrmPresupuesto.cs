@@ -51,13 +51,13 @@ namespace WinFormCarpinteria.Formularios
 		private void FrmNuevoPresupuesto_Load(object sender, EventArgs e)
 		{
 			CargarProductos();
+			txtCantidad.Text = "1";
 			if (modo.Equals(Accion.Create))
 			{
 				lblNroPresupuesto.Text += gestor.ProximoPresupuesto();
 				txtFecha.Text = DateTime.Today.ToString("dd/MM/yyyy");
 				txtCliente.Text = "Consumidor Final";
 				txtDescuento.Text = "0";
-				txtCantidad.Text = "1";
 			}
 		}		
 		private void btnAgregar_Click(object sender, EventArgs e)
@@ -81,18 +81,14 @@ namespace WinFormCarpinteria.Formularios
 				}
 			}
 
-			DataRowView item = (DataRowView)cboProducto.SelectedItem;
+			Producto oProducto = (Producto)cboProducto.SelectedItem;
+			DetallePresupuesto detalle = new DetallePresupuesto();
 
-			int prod = Convert.ToInt32(item.Row.ItemArray[0]);
-			string nom = item.Row.ItemArray[1].ToString();
-			double pre = Convert.ToDouble(item.Row.ItemArray[2]);
-			int cant = Convert.ToInt32(txtCantidad.Text);
-
-			Producto p = new Producto(prod, nom, pre);
-			DetallePresupuesto detalle = new DetallePresupuesto(p, cant);
+			detalle.Producto = oProducto;
+			detalle.Cantidad = Convert.ToInt32(txtCantidad.Text);			
 
 			oPresupuesto.AgregarDetalle(detalle);
-			dgvDetalles.Rows.Add(new object[] { prod, nom, pre, cant });
+			dgvDetalles.Rows.Add(new object[] { oProducto.IdProducto, oProducto.NProducto, oProducto.Precio, detalle.Cantidad });
 
 			CalcularTotales();
 		}
@@ -177,19 +173,17 @@ namespace WinFormCarpinteria.Formularios
 		}
 		private void CargarPresupuesto(int nroPresupuesto)
 		{
-			lblNroPresupuesto.Text += nroPresupuesto;
 			oPresupuesto = gestor.CargarPresupuesto(nroPresupuesto);
-
-			txtFecha.Text = oPresupuesto.Fecha.ToString();
+			lblNroPresupuesto.Text += oPresupuesto.PresupuestoNro.ToString();
+			txtFecha.Text = oPresupuesto.Fecha.ToString("dd/MM/yyyy");
 			txtCliente.Text = oPresupuesto.Cliente;
 			txtDescuento.Text = oPresupuesto.Descuento.ToString();
-			txtCantidad.Text = "1";
 
 			dgvDetalles.Rows.Clear();
 
 			foreach (DetallePresupuesto oDetalle in oPresupuesto.Detalles)
 			{
-				dgvDetalles.Rows.Add(new object[] { oDetalle.Producto.NProducto, oDetalle.Producto.Precio, oDetalle.Cantidad, oDetalle.CalcularSubtotal()}); ;
+				dgvDetalles.Rows.Add(new object[] { oDetalle.Producto.IdProducto,oDetalle.Producto.NProducto, oDetalle.Producto.Precio, oDetalle.Cantidad, oDetalle.CalcularSubtotal()}); ;
 			}
 
 			CalcularTotales();

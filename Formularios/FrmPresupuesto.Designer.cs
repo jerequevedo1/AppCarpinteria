@@ -164,7 +164,9 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			this.dgvDetalles.AllowUserToAddRows = false;
 			this.dgvDetalles.AllowUserToDeleteRows = false;
-			this.dgvDetalles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dgvDetalles.AllowUserToResizeRows = false;
+			this.dgvDetalles.ColumnHeadersHeight = 30;
+			this.dgvDetalles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dgvDetalles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id,
             this.ColProd,
@@ -172,6 +174,7 @@ namespace WinFormCarpinteria.Formularios
             this.ColCantidad,
             this.ColAccion});
 			this.dgvDetalles.Location = new System.Drawing.Point(34, 210);
+			this.dgvDetalles.MultiSelect = false;
 			this.dgvDetalles.Name = "dgvDetalles";
 			this.dgvDetalles.ReadOnly = true;
 			this.dgvDetalles.RowHeadersVisible = false;

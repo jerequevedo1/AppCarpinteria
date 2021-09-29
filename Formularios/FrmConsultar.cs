@@ -123,31 +123,9 @@ namespace WinFormCarpinteria.Formularios
 		{
 			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
 
-			if (dgvConsultar.CurrentCell.ColumnIndex==4)
+			if (dgvConsultar.CurrentCell.ColumnIndex==5)
 			{
-				FrmPresupuesto ofrmPresupuesto= new FrmPresupuesto(Accion.Update,nroPresupuesto);
-				ofrmPresupuesto.ShowDialog();
-
-				ConsultarPresupuestos();
-			}
-			if (dgvConsultar.CurrentCell.ColumnIndex == 5)
-			{
-				DialogResult dialogResult = MessageBox.Show("Desea borrar este presupuesto?", "Borrar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-				if (dialogResult==DialogResult.Yes)
-				{
-					if (gestor.BorrarPresupuesto(nroPresupuesto))
-					{
-						MessageBox.Show("Presupuesto borrado con exito.", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
-						dgvConsultar.Rows.Clear();
-						ConsultarPresupuestos();
-					}
-					else
-					{
-						MessageBox.Show("ERROR. No se pudo borrar el presupuesto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-
-				}
-				
+				dgvConsultar_CellDoubleClick(null, null);
 			}
 
 		}
@@ -178,7 +156,35 @@ namespace WinFormCarpinteria.Formularios
 			dgvConsultar.Rows.Clear();
 			foreach (Presupuesto item in lst)
 			{
-				dgvConsultar.Rows.Add(new object[] { item.PresupuestoNro, item.Fecha.ToString("dd/MM/yyyy"), item.Cliente, item.Total });
+				dgvConsultar.Rows.Add(new object[] { item.PresupuestoNro, item.Fecha.ToString("dd/MM/yyyy"), item.Cliente,item.Descuento+" %", "$ "+item.Total });
+			}
+		}
+
+		private void btnEditar_Click(object sender, EventArgs e)
+		{
+			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
+			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto(Accion.Update, nroPresupuesto);
+			ofrmPresupuesto.ShowDialog();
+
+			ConsultarPresupuestos();
+		}
+
+		private void btnBorrar_Click(object sender, EventArgs e)
+		{
+			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
+			DialogResult dialogResult = MessageBox.Show("Desea borrar este presupuesto?", "Borrar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+			if (dialogResult == DialogResult.Yes)
+			{
+				if (gestor.BorrarPresupuesto(nroPresupuesto))
+				{
+					MessageBox.Show("Presupuesto borrado con exito.", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					dgvConsultar.Rows.Clear();
+					ConsultarPresupuestos();
+				}
+				else
+				{
+					MessageBox.Show("ERROR. No se pudo borrar el presupuesto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
 		}
 	}

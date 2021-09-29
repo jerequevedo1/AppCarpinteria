@@ -121,7 +121,23 @@ BEGIN
 	FROM T_PRESUPUESTOS
 	WHERE fecha_baja is null
 END
-
+--------------------------------------------------------------
+GO
+CREATE procedure SP_CONSULTAR_PRESUPUESTOS_INACTIVOS
+AS
+BEGIN
+	SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
+	FROM T_PRESUPUESTOS
+	WHERE fecha_baja is not null
+END
+--------------------------------------------------------------
+GO
+CREATE procedure SP_CONSULTAR_PRESUPUESTOS_CON_INACTIVOS
+AS
+BEGIN
+	SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
+	FROM T_PRESUPUESTOS
+END
 
 select * from T_DETALLES_PRESUPUESTO
 select * from T_PRESUPUESTOS

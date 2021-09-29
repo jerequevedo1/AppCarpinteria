@@ -95,8 +95,6 @@ namespace WinFormCarpinteria.AccesoDatos
 				cmd.ExecuteNonQuery();
 
 				int detalleNro = 1;
-
-				//borro todos los detalles y cargo detalles actuales nuevamente?
 		
 				SqlCommand cmdBorrado = new SqlCommand();
 				cmdBorrado.Connection = cnn;
@@ -106,14 +104,11 @@ namespace WinFormCarpinteria.AccesoDatos
 				cmdBorrado.Parameters.AddWithValue("@nroPresupuesto", oPresupuesto.PresupuestoNro);
 				cmdBorrado.ExecuteNonQuery();
 
-				//como hago si elimina algun detalle el cliente? en bd quedaria un registro colgado
-
 				foreach (DetallePresupuesto item in oPresupuesto.Detalles)
 				{
 					SqlCommand cmdDet = new SqlCommand();
 					cmdDet.Connection = cnn;
 					cmdDet.Transaction = trans;
-					//cmdDet.CommandText = "SP_EDITAR_DETALLES_PRESUPUESTO"; edito o inserto de nuevo?
 					cmdDet.CommandText = "SP_INSERTAR_DETALLE";
 					cmdDet.CommandType = CommandType.StoredProcedure;
 					cmdDet.Parameters.AddWithValue("@presupuesto_nro", oPresupuesto.PresupuestoNro);

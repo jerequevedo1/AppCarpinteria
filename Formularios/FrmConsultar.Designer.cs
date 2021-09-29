@@ -30,12 +30,6 @@ namespace WinFormCarpinteria.Formularios
 		private void InitializeComponent()
 		{
 			this.dgvConsultar = new System.Windows.Forms.DataGridView();
-			this.cNroPresup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cFecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cAccion = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.cAccion2 = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.btnCancelar = new System.Windows.Forms.Button();
 			this.lblFiltro = new System.Windows.Forms.Label();
 			this.cboFiltro = new System.Windows.Forms.ComboBox();
@@ -51,6 +45,12 @@ namespace WinFormCarpinteria.Formularios
 			this.btnEditar = new System.Windows.Forms.Button();
 			this.btnBorrar = new System.Windows.Forms.Button();
 			this.lblParametro = new System.Windows.Forms.Label();
+			this.cNroPresup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cFecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cDescuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cAccion = new System.Windows.Forms.DataGridViewButtonColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dgvConsultar)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -58,67 +58,26 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			this.dgvConsultar.AllowUserToAddRows = false;
 			this.dgvConsultar.AllowUserToDeleteRows = false;
-			this.dgvConsultar.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dgvConsultar.AllowUserToResizeRows = false;
+			this.dgvConsultar.ColumnHeadersHeight = 30;
+			this.dgvConsultar.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.dgvConsultar.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cNroPresup,
             this.cFecha,
             this.cCliente,
+            this.cDescuento,
             this.cTotal,
-            this.cAccion,
-            this.cAccion2});
+            this.cAccion});
 			this.dgvConsultar.Location = new System.Drawing.Point(12, 172);
+			this.dgvConsultar.MultiSelect = false;
 			this.dgvConsultar.Name = "dgvConsultar";
 			this.dgvConsultar.ReadOnly = true;
 			this.dgvConsultar.RowHeadersVisible = false;
 			this.dgvConsultar.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dgvConsultar.Size = new System.Drawing.Size(544, 429);
+			this.dgvConsultar.Size = new System.Drawing.Size(543, 429);
 			this.dgvConsultar.TabIndex = 0;
 			this.dgvConsultar.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvConsultar_CellContentClick);
 			this.dgvConsultar.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvConsultar_CellDoubleClick);
-			// 
-			// cNroPresup
-			// 
-			this.cNroPresup.HeaderText = "Numero Presupuesto";
-			this.cNroPresup.Name = "cNroPresup";
-			this.cNroPresup.ReadOnly = true;
-			// 
-			// cFecha
-			// 
-			this.cFecha.HeaderText = "Fecha";
-			this.cFecha.Name = "cFecha";
-			this.cFecha.ReadOnly = true;
-			// 
-			// cCliente
-			// 
-			this.cCliente.HeaderText = "Cliente";
-			this.cCliente.Name = "cCliente";
-			this.cCliente.ReadOnly = true;
-			// 
-			// cTotal
-			// 
-			this.cTotal.HeaderText = "Total";
-			this.cTotal.Name = "cTotal";
-			this.cTotal.ReadOnly = true;
-			// 
-			// cAccion
-			// 
-			this.cAccion.HeaderText = "Accion";
-			this.cAccion.Name = "cAccion";
-			this.cAccion.ReadOnly = true;
-			this.cAccion.Text = "Editar";
-			this.cAccion.UseColumnTextForButtonValue = true;
-			this.cAccion.Width = 70;
-			// 
-			// cAccion2
-			// 
-			this.cAccion2.HeaderText = "Accion";
-			this.cAccion2.Name = "cAccion2";
-			this.cAccion2.ReadOnly = true;
-			this.cAccion2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.cAccion2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.cAccion2.Text = "Borrar";
-			this.cAccion2.UseColumnTextForButtonValue = true;
-			this.cAccion2.Width = 70;
 			// 
 			// btnCancelar
 			// 
@@ -236,6 +195,7 @@ namespace WinFormCarpinteria.Formularios
 			this.btnEditar.TabIndex = 13;
 			this.btnEditar.Text = "Editar";
 			this.btnEditar.UseVisualStyleBackColor = true;
+			this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
 			// 
 			// btnBorrar
 			// 
@@ -245,6 +205,7 @@ namespace WinFormCarpinteria.Formularios
 			this.btnBorrar.TabIndex = 14;
 			this.btnBorrar.Text = "Borrar";
 			this.btnBorrar.UseVisualStyleBackColor = true;
+			this.btnBorrar.Click += new System.EventHandler(this.btnBorrar_Click);
 			// 
 			// lblParametro
 			// 
@@ -254,6 +215,47 @@ namespace WinFormCarpinteria.Formularios
 			this.lblParametro.Size = new System.Drawing.Size(58, 13);
 			this.lblParametro.TabIndex = 15;
 			this.lblParametro.Text = "Parametro:";
+			// 
+			// cNroPresup
+			// 
+			this.cNroPresup.HeaderText = "Presupuesto";
+			this.cNroPresup.Name = "cNroPresup";
+			this.cNroPresup.ReadOnly = true;
+			this.cNroPresup.Width = 85;
+			// 
+			// cFecha
+			// 
+			this.cFecha.HeaderText = "Fecha";
+			this.cFecha.Name = "cFecha";
+			this.cFecha.ReadOnly = true;
+			// 
+			// cCliente
+			// 
+			this.cCliente.HeaderText = "Cliente";
+			this.cCliente.Name = "cCliente";
+			this.cCliente.ReadOnly = true;
+			// 
+			// cDescuento
+			// 
+			this.cDescuento.HeaderText = "Descuento";
+			this.cDescuento.Name = "cDescuento";
+			this.cDescuento.ReadOnly = true;
+			this.cDescuento.Width = 80;
+			// 
+			// cTotal
+			// 
+			this.cTotal.HeaderText = "Total";
+			this.cTotal.Name = "cTotal";
+			this.cTotal.ReadOnly = true;
+			// 
+			// cAccion
+			// 
+			this.cAccion.HeaderText = "Accion";
+			this.cAccion.Name = "cAccion";
+			this.cAccion.ReadOnly = true;
+			this.cAccion.Text = "Ver";
+			this.cAccion.UseColumnTextForButtonValue = true;
+			this.cAccion.Width = 75;
 			// 
 			// FrmConsultar
 			// 
@@ -289,12 +291,6 @@ namespace WinFormCarpinteria.Formularios
 		#endregion
 
 		private System.Windows.Forms.DataGridView dgvConsultar;
-		private System.Windows.Forms.DataGridViewTextBoxColumn cNroPresup;
-		private System.Windows.Forms.DataGridViewTextBoxColumn cFecha;
-		private System.Windows.Forms.DataGridViewTextBoxColumn cCliente;
-		private System.Windows.Forms.DataGridViewTextBoxColumn cTotal;
-		private System.Windows.Forms.DataGridViewButtonColumn cAccion;
-		private System.Windows.Forms.DataGridViewButtonColumn cAccion2;
 		private System.Windows.Forms.Button btnCancelar;
 		private System.Windows.Forms.Label lblFiltro;
 		private System.Windows.Forms.ComboBox cboFiltro;
@@ -310,5 +306,11 @@ namespace WinFormCarpinteria.Formularios
 		private System.Windows.Forms.Button btnEditar;
 		private System.Windows.Forms.Button btnBorrar;
 		private System.Windows.Forms.Label lblParametro;
+		private System.Windows.Forms.DataGridViewTextBoxColumn cNroPresup;
+		private System.Windows.Forms.DataGridViewTextBoxColumn cFecha;
+		private System.Windows.Forms.DataGridViewTextBoxColumn cCliente;
+		private System.Windows.Forms.DataGridViewTextBoxColumn cDescuento;
+		private System.Windows.Forms.DataGridViewTextBoxColumn cTotal;
+		private System.Windows.Forms.DataGridViewButtonColumn cAccion;
 	}
 }
