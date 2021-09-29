@@ -34,12 +34,9 @@ namespace WinFormCarpinteria.Servicios
 		{
 			return dao.ObtenerProximoNumero();
 		}
-		public DataTable ObtenerProductos()
+		public List<Producto> ObtenerProductos()
 		{
-			DataTable tabla = new DataTable();
-			tabla = dao.ListarProductos();
-
-			return tabla;
+			return dao.ConsultarProductos();
 		}
 
 		public DataTable ListarPresupuestos()
@@ -50,25 +47,17 @@ namespace WinFormCarpinteria.Servicios
 		{
 			return daoL.ConsultarUnPresupuesto(nroPresupuesto);
 		}
-		//public DataTable CargarEditarPresupuesto(int nroPresupuesto)
-		//{
-		//	return daoL.ConsultarPresupuestoEditar(nroPresupuesto);
-		//}
-		//public DataTable CargarDetallesEditarPresupuesto(int nroPresupuesto)
-		//{
-		//	return daoL.ConsultarDetallesPresupuestoEditar(nroPresupuesto);
-		//}
 		public DataTable FiltrarNroPresupuesto(int nroPresupuesto)
 		{
-			return daoL.FiltrarNroPresupuesto(nroPresupuesto);
+			return daoL.ConsultarPresupuestoNroPresupuesto(nroPresupuesto);
 		}
 		public DataTable FiltrarFecha(DateTime fechaDesde, DateTime fechaHasta)
 		{
-			return daoL.FiltrarFecha(fechaDesde,fechaHasta);
+			return daoL.ConsultarPresupuestoFecha(fechaDesde,fechaHasta);
 		}
 		public DataTable FiltrarCliente(string cliente)
 		{
-			return daoL.FiltrarCliente(cliente);
+			return daoL.ConsultarPresupuestoCliente(cliente);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace WinFormCarpinteria.AccesoDatos
@@ -9,8 +10,6 @@ namespace WinFormCarpinteria.AccesoDatos
 		bool EditarPresupuesto(Presupuesto oPresupuesto);
 		bool BorrarPresupuesto(int nroPresupuesto);
 		int ObtenerProximoNumero();
-		DataTable ListarProductos();
-
-
+		List<Producto> ConsultarProductos();
 	}
 }

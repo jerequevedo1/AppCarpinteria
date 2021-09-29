@@ -29,6 +29,7 @@ namespace WinFormCarpinteria.Formularios
 
 			if (modo.Equals(Accion.Read))
 			{
+				Text = "Presupuesto";
 				HabilitarConsulta();
 				CargarPresupuesto(nro);
 			}
@@ -163,15 +164,10 @@ namespace WinFormCarpinteria.Formularios
 		}
 		private void CargarProductos()
 		{
-			DataTable tabla = gestor.ObtenerProductos();
-
-			if (tabla != null)
-			{
-				cboProducto.DataSource = tabla;
-				cboProducto.ValueMember = tabla.Columns[0].ColumnName;
-				cboProducto.DisplayMember = tabla.Columns[1].ColumnName;
-			}
-
+			List<Producto> lst = gestor.ObtenerProductos();
+			cboProducto.DataSource = lst;
+			cboProducto.ValueMember = "IdProducto";
+			cboProducto.DisplayMember = "NProducto";
 		}
 		private void CalcularTotales()
 		{

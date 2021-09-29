@@ -184,9 +184,21 @@ namespace WinFormCarpinteria.AccesoDatos
 		{
 			return HelperDao.ObtenerInstancia().ProximoID("SP_PROXIMO_ID", "@next");
 		}
-		public DataTable ListarProductos()
+		public List<Producto> ConsultarProductos()
 		{
-			return HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRODUCTOS");
+			DataTable tabla = HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRODUCTOS");
+			List<Producto> lst = new List<Producto>();
+			foreach (DataRow row in tabla.Rows)
+			{
+				Producto oProducto = new Producto();
+				oProducto.IdProducto = Convert.ToInt32(row["id_producto"].ToString());
+				oProducto.NProducto = row["n_producto"].ToString();
+				oProducto.Precio = Convert.ToDouble(row["precio"].ToString());
+				oProducto.Activo = row["activo"].ToString().Equals("S");
+
+				lst.Add(oProducto);
+			}
+			return lst;
 		}
 	}
 }
