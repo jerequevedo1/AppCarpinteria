@@ -38,6 +38,7 @@ namespace WinFormCarpinteria.Formularios
 				Text = "Editar Presupuesto";
 				CargarPresupuesto(nro);
 			}
+			CargarPropiedadesGrilla();
 		}
 
 		public enum Accion
@@ -59,7 +60,7 @@ namespace WinFormCarpinteria.Formularios
 				txtCliente.Text = "Consumidor Final";
 				txtDescuento.Text = "0";
 			}
-		}		
+		}
 		private void btnAgregar_Click(object sender, EventArgs e)
 		{
 			if (cboProducto.Text.Equals(string.Empty))
@@ -88,13 +89,13 @@ namespace WinFormCarpinteria.Formularios
 			detalle.Cantidad = Convert.ToInt32(txtCantidad.Text);			
 
 			oPresupuesto.AgregarDetalle(detalle);
-			dgvDetalles.Rows.Add(new object[] { oProducto.IdProducto, oProducto.NProducto, oProducto.Precio, detalle.Cantidad });
+			dgvDetalles.Rows.Add(new object[] { oProducto.IdProducto, oProducto.NProducto,"$ "+ oProducto.Precio, detalle.Cantidad, "$ " + detalle.CalcularSubtotal() });
 
 			CalcularTotales();
 		}
 		private void dgvDetalles_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (dgvDetalles.CurrentCell.ColumnIndex == 4)
+			if (dgvDetalles.CurrentCell.ColumnIndex == 5)
 			{
 				oPresupuesto.QuitarDetalle(dgvDetalles.CurrentRow.Index);
 				dgvDetalles.Rows.Remove(dgvDetalles.CurrentRow);
@@ -169,11 +170,12 @@ namespace WinFormCarpinteria.Formularios
 		{
 			txtSubtotal.Text = oPresupuesto.CalcularTotal().ToString();
 			double desc = oPresupuesto.CalcularTotal() * Convert.ToDouble(txtDescuento.Text) / 100;
+			txtTotalDescuento.Text = desc.ToString();
 			txtTotal.Text = (oPresupuesto.CalcularTotal() - desc).ToString();
 		}
 		private void CargarPresupuesto(int nroPresupuesto)
 		{
-			oPresupuesto = gestor.CargarPresupuesto(nroPresupuesto);
+			oPresupuesto = gestor.CargarPresupuestoPorNro(nroPresupuesto);
 			lblNroPresupuesto.Text += oPresupuesto.PresupuestoNro.ToString();
 			txtFecha.Text = oPresupuesto.Fecha.ToString("dd/MM/yyyy");
 			txtCliente.Text = oPresupuesto.Cliente;
@@ -183,7 +185,7 @@ namespace WinFormCarpinteria.Formularios
 
 			foreach (DetallePresupuesto oDetalle in oPresupuesto.Detalles)
 			{
-				dgvDetalles.Rows.Add(new object[] { oDetalle.Producto.IdProducto,oDetalle.Producto.NProducto, oDetalle.Producto.Precio, oDetalle.Cantidad, oDetalle.CalcularSubtotal()}); ;
+				dgvDetalles.Rows.Add(new object[] { oDetalle.Producto.IdProducto,oDetalle.Producto.NProducto, "$ " + oDetalle.Producto.Precio, oDetalle.Cantidad, "$ " + oDetalle.CalcularSubtotal()}); ;
 			}
 
 			CalcularTotales();
@@ -197,6 +199,13 @@ namespace WinFormCarpinteria.Formularios
 				txtCantidad.Enabled = false;
 				btnAgregar.Enabled = false;
 				dgvDetalles.Enabled = false;
+		}
+		private void CargarPropiedadesGrilla()
+		{
+			dgvDetalles.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dgvDetalles.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+			dgvDetalles.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dgvDetalles.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		}
 	}
 }

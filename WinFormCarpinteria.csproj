@@ -105,6 +105,7 @@
       <DependentUpon>DSProductos.xsd</DependentUpon>
     </Compile>
     <Compile Include="Servicios\GestorPresupuesto.cs" />
+    <Compile Include="Servicios\Parametro.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <EmbeddedResource Include="Formularios\FrmConsultar.resx">
       <DependentUpon>FrmConsultar.cs</DependentUpon>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using WinFormCarpinteria.Servicios;
 
 namespace WinFormCarpinteria.AccesoDatos
 {
@@ -11,12 +12,7 @@ namespace WinFormCarpinteria.AccesoDatos
 		bool BorrarPresupuesto(int nroPresupuesto);
 		int ObtenerProximoNumero();
 		List<Producto> ConsultarProductos();
-		List<Presupuesto> ConsultarPresupuestos();
+		List<Presupuesto> ConsultarPresupuestos(List<Parametro> criterios);
 		Presupuesto ConsultarUnPresupuesto(int nroPresupuesto);
-		List<Presupuesto> ConsultarPresupuestoNroPresupuesto(int nroPresupuesto);
-		List<Presupuesto> ConsultarPresupuestoFecha(DateTime fechaDesde, DateTime fechaHasta);
-		List<Presupuesto> ConsultarPresupuestoCliente(string cliente);
-		List<Presupuesto> ConsultarPresupuestoInactivo();
-		List<Presupuesto> ConsultarPresupuestoConInactivo();
 	}
 }

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WinFormCarpinteria.Servicios;
 
 namespace WinFormCarpinteria.AccesoDatos
 {
@@ -186,23 +187,45 @@ namespace WinFormCarpinteria.AccesoDatos
 			}
 			return lst;
 		}
-		public List<Presupuesto> ConsultarPresupuestos()
+		public List<Presupuesto> ConsultarPresupuestos(List<Parametro> criterios)
 		{
 			List<Presupuesto> lst = new List<Presupuesto>();
-			DataTable tabla = HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRESUPUESTOS");
-
-			foreach (DataRow row in tabla.Rows)
+			DataTable table = new DataTable();
+			SqlConnection cnn = new SqlConnection(@"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True");
+			try
 			{
-				Presupuesto oPresupuesto = new Presupuesto();
-				oPresupuesto.Cliente = row["cliente"].ToString();
-				oPresupuesto.Fecha = Convert.ToDateTime(row["fecha"].ToString());
-				oPresupuesto.Descuento = Convert.ToDouble(row["descuento"].ToString());
-				oPresupuesto.PresupuestoNro = Convert.ToInt32(row["presupuesto_nro"].ToString());
-				oPresupuesto.Total = Convert.ToDouble(row["total"].ToString());
+				cnn.Open();
 
-				lst.Add(oPresupuesto);
+				SqlCommand cmd = new SqlCommand("SP_FILTRO_PRESUPUESTOS", cnn);
+				cmd.CommandType = CommandType.StoredProcedure;
+				foreach (Parametro p in criterios)
+				{
+					cmd.Parameters.AddWithValue(p.Nombre, p.Valor);
+				}
+
+				table.Load(cmd.ExecuteReader());
+
+				foreach (DataRow row in table.Rows)
+				{
+					Presupuesto oPresupuesto = new Presupuesto();
+					oPresupuesto.Cliente = row["cliente"].ToString();
+					oPresupuesto.Fecha = Convert.ToDateTime(row["fecha"].ToString());
+					oPresupuesto.Descuento = Convert.ToDouble(row["descuento"].ToString());
+					oPresupuesto.PresupuestoNro = Convert.ToInt32(row["presupuesto_nro"].ToString());
+					oPresupuesto.Total = Convert.ToDouble(row["total"].ToString());
+
+					if (!row["fecha_baja"].Equals(DBNull.Value))
+						oPresupuesto.FechaBaja = Convert.ToDateTime(row["fecha_baja"].ToString());
+
+					lst.Add(oPresupuesto);
+				}
+
+				cnn.Close();
 			}
-
+			catch (SqlException)
+			{
+				lst = null;
+			}
 			return lst;
 		}
 		public Presupuesto ConsultarUnPresupuesto(int nroPresupuesto)
@@ -230,6 +253,15 @@ namespace WinFormCarpinteria.AccesoDatos
 					oPresupuesto.Descuento = Convert.ToDouble(lector["descuento"].ToString());
 					oPresupuesto.PresupuestoNro = Convert.ToInt32(lector["presupuesto_nro"].ToString());
 					oPresupuesto.Total = Convert.ToDouble(lector["total"].ToString());
+					if (!lector.IsDBNull(4))
+					{
+						oPresupuesto.FechaBaja = Convert.ToDateTime(lector["fecha_baja"].ToString());
+					}
+					else
+					{
+						oPresupuesto.FechaBaja = DateTime.MinValue;
+					}
+					
 					primerRegistro = false;
 				}
 
@@ -247,132 +279,6 @@ namespace WinFormCarpinteria.AccesoDatos
 			}
 			cnn.Close();
 			return oPresupuesto;
-		}
-		public List<Presupuesto> ConsultarPresupuestoNroPresupuesto(int nroPresupuesto)
-		{
-			List<Presupuesto> lst = new List<Presupuesto>();
-			DataTable tabla = new DataTable();
-			SqlConnection cnn = new SqlConnection();
-			SqlCommand cmd = new SqlCommand();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_FILTRO_NROPRESUP";
-			cmd.Parameters.AddWithValue("@nro_presup", nroPresupuesto);
-			tabla.Load(cmd.ExecuteReader());
-			cnn.Close();
-
-			foreach (DataRow row in tabla.Rows)
-			{
-				Presupuesto oPresupuesto = new Presupuesto();
-				oPresupuesto.Cliente = row["cliente"].ToString();
-				oPresupuesto.Fecha = Convert.ToDateTime(row["fecha"].ToString());
-				oPresupuesto.Descuento = Convert.ToDouble(row["descuento"].ToString());
-				oPresupuesto.PresupuestoNro = Convert.ToInt32(row["presupuesto_nro"].ToString());
-				oPresupuesto.Total = Convert.ToDouble(row["total"].ToString());
-
-				lst.Add(oPresupuesto);
-			}
-
-			return lst;
-		}
-		public List<Presupuesto> ConsultarPresupuestoFecha(DateTime fechaDesde, DateTime fechaHasta)
-		{
-			List<Presupuesto> lst = new List<Presupuesto>();
-			DataTable tabla = new DataTable();
-			SqlConnection cnn = new SqlConnection();
-			SqlCommand cmd = new SqlCommand();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_FILTRO_FECHA";
-			cmd.Parameters.AddWithValue("@fechaDesde", fechaDesde);
-			cmd.Parameters.AddWithValue("@fechaHasta", fechaHasta);
-			tabla.Load(cmd.ExecuteReader());
-			cnn.Close();
-
-			foreach (DataRow row in tabla.Rows)
-			{
-				Presupuesto oPresupuesto = new Presupuesto();
-				oPresupuesto.Cliente = row["cliente"].ToString();
-				oPresupuesto.Fecha = Convert.ToDateTime(row["fecha"].ToString());
-				oPresupuesto.Descuento = Convert.ToDouble(row["descuento"].ToString());
-				oPresupuesto.PresupuestoNro = Convert.ToInt32(row["presupuesto_nro"].ToString());
-				oPresupuesto.Total = Convert.ToDouble(row["total"].ToString());
-
-				lst.Add(oPresupuesto);
-			}
-
-			return lst;
-		}
-		public List<Presupuesto> ConsultarPresupuestoCliente(string cliente)
-		{
-			List<Presupuesto> lst = new List<Presupuesto>();
-			DataTable tabla = new DataTable();
-			SqlConnection cnn = new SqlConnection();
-			SqlCommand cmd = new SqlCommand();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_FILTRO_CLIENTE";
-			cmd.Parameters.AddWithValue("@cliente", cliente);
-			tabla.Load(cmd.ExecuteReader());
-			cnn.Close();
-
-			foreach (DataRow row in tabla.Rows)
-			{
-				Presupuesto oPresupuesto = new Presupuesto();
-				oPresupuesto.Cliente = row["cliente"].ToString();
-				oPresupuesto.Fecha = Convert.ToDateTime(row["fecha"].ToString());
-				oPresupuesto.Descuento = Convert.ToDouble(row["descuento"].ToString());
-				oPresupuesto.PresupuestoNro = Convert.ToInt32(row["presupuesto_nro"].ToString());
-				oPresupuesto.Total = Convert.ToDouble(row["total"].ToString());
-
-				lst.Add(oPresupuesto);
-			}
-
-			return lst;
-		}
-		public List<Presupuesto> ConsultarPresupuestoInactivo()
-		{
-			List<Presupuesto> lst = new List<Presupuesto>();
-			DataTable tabla = HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRESUPUESTOS_INACTIVOS");
-
-			foreach (DataRow row in tabla.Rows)
-			{
-				Presupuesto oPresupuesto = new Presupuesto();
-				oPresupuesto.Cliente = row["cliente"].ToString();
-				oPresupuesto.Fecha = Convert.ToDateTime(row["fecha"].ToString());
-				oPresupuesto.Descuento = Convert.ToDouble(row["descuento"].ToString());
-				oPresupuesto.PresupuestoNro = Convert.ToInt32(row["presupuesto_nro"].ToString());
-				oPresupuesto.Total = Convert.ToDouble(row["total"].ToString());
-
-				lst.Add(oPresupuesto);
-			}
-
-			return lst;
-		}
-		public List<Presupuesto> ConsultarPresupuestoConInactivo()
-		{
-			List<Presupuesto> lst = new List<Presupuesto>();
-			DataTable tabla = HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRESUPUESTOS_CON_INACTIVOS");
-
-			foreach (DataRow row in tabla.Rows)
-			{
-				Presupuesto oPresupuesto = new Presupuesto();
-				oPresupuesto.Cliente = row["cliente"].ToString();
-				oPresupuesto.Fecha = Convert.ToDateTime(row["fecha"].ToString());
-				oPresupuesto.Descuento = Convert.ToDouble(row["descuento"].ToString());
-				oPresupuesto.PresupuestoNro = Convert.ToInt32(row["presupuesto_nro"].ToString());
-				oPresupuesto.Total = Convert.ToDouble(row["total"].ToString());
-
-				lst.Add(oPresupuesto);
-			}
-
-			return lst;
 		}
 	}
 }

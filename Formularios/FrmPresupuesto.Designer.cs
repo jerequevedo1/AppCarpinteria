@@ -42,15 +42,18 @@ namespace WinFormCarpinteria.Formularios
 			this.txtCantidad = new System.Windows.Forms.TextBox();
 			this.btnAgregar = new System.Windows.Forms.Button();
 			this.dgvDetalles = new System.Windows.Forms.DataGridView();
-			this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ColProd = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ColPrecio = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ColCantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ColAccion = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.txtTotal = new System.Windows.Forms.TextBox();
 			this.txtSubtotal = new System.Windows.Forms.TextBox();
 			this.btnAceptar = new System.Windows.Forms.Button();
 			this.btnCancelar = new System.Windows.Forms.Button();
+			this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColProd = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColPrecio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColCantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cSubtotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ColAccion = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.txtTotalDescuento = new System.Windows.Forms.TextBox();
+			this.lblTotalDescuento = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.dgvDetalles)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -105,7 +108,7 @@ namespace WinFormCarpinteria.Formularios
 			// 
 			this.lblTotal.AutoSize = true;
 			this.lblTotal.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblTotal.Location = new System.Drawing.Point(402, 433);
+			this.lblTotal.Location = new System.Drawing.Point(402, 461);
 			this.lblTotal.Name = "lblTotal";
 			this.lblTotal.Size = new System.Drawing.Size(59, 19);
 			this.lblTotal.TabIndex = 5;
@@ -172,17 +175,54 @@ namespace WinFormCarpinteria.Formularios
             this.ColProd,
             this.ColPrecio,
             this.ColCantidad,
+            this.cSubtotal,
             this.ColAccion});
-			this.dgvDetalles.Location = new System.Drawing.Point(34, 210);
+			this.dgvDetalles.Location = new System.Drawing.Point(12, 210);
 			this.dgvDetalles.MultiSelect = false;
 			this.dgvDetalles.Name = "dgvDetalles";
 			this.dgvDetalles.ReadOnly = true;
 			this.dgvDetalles.RowHeadersVisible = false;
 			this.dgvDetalles.RowHeadersWidth = 51;
 			this.dgvDetalles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dgvDetalles.Size = new System.Drawing.Size(533, 169);
+			this.dgvDetalles.Size = new System.Drawing.Size(580, 169);
 			this.dgvDetalles.TabIndex = 12;
 			this.dgvDetalles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetalles_CellContentClick);
+			// 
+			// txtTotal
+			// 
+			this.txtTotal.Enabled = false;
+			this.txtTotal.Location = new System.Drawing.Point(467, 460);
+			this.txtTotal.Name = "txtTotal";
+			this.txtTotal.Size = new System.Drawing.Size(100, 20);
+			this.txtTotal.TabIndex = 14;
+			// 
+			// txtSubtotal
+			// 
+			this.txtSubtotal.Enabled = false;
+			this.txtSubtotal.Location = new System.Drawing.Point(467, 394);
+			this.txtSubtotal.Name = "txtSubtotal";
+			this.txtSubtotal.Size = new System.Drawing.Size(100, 20);
+			this.txtSubtotal.TabIndex = 13;
+			// 
+			// btnAceptar
+			// 
+			this.btnAceptar.Location = new System.Drawing.Point(34, 505);
+			this.btnAceptar.Name = "btnAceptar";
+			this.btnAceptar.Size = new System.Drawing.Size(100, 23);
+			this.btnAceptar.TabIndex = 15;
+			this.btnAceptar.Text = "Aceptar";
+			this.btnAceptar.UseVisualStyleBackColor = true;
+			this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
+			// 
+			// btnCancelar
+			// 
+			this.btnCancelar.Location = new System.Drawing.Point(467, 505);
+			this.btnCancelar.Name = "btnCancelar";
+			this.btnCancelar.Size = new System.Drawing.Size(100, 23);
+			this.btnCancelar.TabIndex = 16;
+			this.btnCancelar.Text = "Cancelar";
+			this.btnCancelar.UseVisualStyleBackColor = true;
+			this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
 			// 
 			// Id
 			// 
@@ -199,7 +239,7 @@ namespace WinFormCarpinteria.Formularios
 			this.ColProd.MinimumWidth = 6;
 			this.ColProd.Name = "ColProd";
 			this.ColProd.ReadOnly = true;
-			this.ColProd.Width = 230;
+			this.ColProd.Width = 227;
 			// 
 			// ColPrecio
 			// 
@@ -214,6 +254,13 @@ namespace WinFormCarpinteria.Formularios
 			this.ColCantidad.MinimumWidth = 6;
 			this.ColCantidad.Name = "ColCantidad";
 			this.ColCantidad.ReadOnly = true;
+			this.ColCantidad.Width = 75;
+			// 
+			// cSubtotal
+			// 
+			this.cSubtotal.HeaderText = "Subtotal";
+			this.cSubtotal.Name = "cSubtotal";
+			this.cSubtotal.ReadOnly = true;
 			// 
 			// ColAccion
 			// 
@@ -223,48 +270,33 @@ namespace WinFormCarpinteria.Formularios
 			this.ColAccion.ReadOnly = true;
 			this.ColAccion.Text = "Quitar";
 			this.ColAccion.UseColumnTextForButtonValue = true;
+			this.ColAccion.Width = 75;
 			// 
-			// txtTotal
+			// txtTotalDescuento
 			// 
-			this.txtTotal.Enabled = false;
-			this.txtTotal.Location = new System.Drawing.Point(467, 434);
-			this.txtTotal.Name = "txtTotal";
-			this.txtTotal.Size = new System.Drawing.Size(100, 20);
-			this.txtTotal.TabIndex = 14;
+			this.txtTotalDescuento.Enabled = false;
+			this.txtTotalDescuento.Location = new System.Drawing.Point(467, 427);
+			this.txtTotalDescuento.Name = "txtTotalDescuento";
+			this.txtTotalDescuento.Size = new System.Drawing.Size(100, 20);
+			this.txtTotalDescuento.TabIndex = 18;
 			// 
-			// txtSubtotal
+			// lblTotalDescuento
 			// 
-			this.txtSubtotal.Enabled = false;
-			this.txtSubtotal.Location = new System.Drawing.Point(467, 395);
-			this.txtSubtotal.Name = "txtSubtotal";
-			this.txtSubtotal.Size = new System.Drawing.Size(100, 20);
-			this.txtSubtotal.TabIndex = 13;
-			// 
-			// btnAceptar
-			// 
-			this.btnAceptar.Location = new System.Drawing.Point(361, 477);
-			this.btnAceptar.Name = "btnAceptar";
-			this.btnAceptar.Size = new System.Drawing.Size(100, 23);
-			this.btnAceptar.TabIndex = 15;
-			this.btnAceptar.Text = "Aceptar";
-			this.btnAceptar.UseVisualStyleBackColor = true;
-			this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
-			// 
-			// btnCancelar
-			// 
-			this.btnCancelar.Location = new System.Drawing.Point(467, 477);
-			this.btnCancelar.Name = "btnCancelar";
-			this.btnCancelar.Size = new System.Drawing.Size(100, 23);
-			this.btnCancelar.TabIndex = 16;
-			this.btnCancelar.Text = "Cancelar";
-			this.btnCancelar.UseVisualStyleBackColor = true;
-			this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+			this.lblTotalDescuento.AutoSize = true;
+			this.lblTotalDescuento.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblTotalDescuento.Location = new System.Drawing.Point(396, 428);
+			this.lblTotalDescuento.Name = "lblTotalDescuento";
+			this.lblTotalDescuento.Size = new System.Drawing.Size(65, 19);
+			this.lblTotalDescuento.TabIndex = 17;
+			this.lblTotalDescuento.Text = "Desc. $";
 			// 
 			// FrmPresupuesto
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(604, 512);
+			this.ClientSize = new System.Drawing.Size(604, 545);
+			this.Controls.Add(this.txtTotalDescuento);
+			this.Controls.Add(this.lblTotalDescuento);
 			this.Controls.Add(this.btnCancelar);
 			this.Controls.Add(this.btnAceptar);
 			this.Controls.Add(this.txtTotal);
@@ -315,6 +347,9 @@ namespace WinFormCarpinteria.Formularios
 		private System.Windows.Forms.DataGridViewTextBoxColumn ColProd;
 		private System.Windows.Forms.DataGridViewTextBoxColumn ColPrecio;
 		private System.Windows.Forms.DataGridViewTextBoxColumn ColCantidad;
+		private System.Windows.Forms.DataGridViewTextBoxColumn cSubtotal;
 		private System.Windows.Forms.DataGridViewButtonColumn ColAccion;
+		private System.Windows.Forms.TextBox txtTotalDescuento;
+		private System.Windows.Forms.Label lblTotalDescuento;
 	}
 }

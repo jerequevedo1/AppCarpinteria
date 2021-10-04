@@ -14,36 +14,6 @@ WHERE TABLE_NAME = 'T_PRESUPUESTOS' AND ORDINAL_POSITION in (1,2,3,6)
 EXEC SP_TIPOS_FILTROS
 ------------------------------------------------------------------------------
 GO
-CREATE PROCEDURE SP_FILTRO_NROPRESUP
-@nro_presup int
-AS
-SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
-FROM T_PRESUPUESTOS 
-WHERE presupuesto_nro=@nro_presup
-
-exec SP_FILTRO_NROPRESUP 2
-------------------------------------------------------------------------------
-GO
-CREATE PROCEDURE SP_FILTRO_FECHA
-@fechaDesde date,
-@fechaHasta date
-AS
-SET DATEFORMAT dmy
-SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
-FROM T_PRESUPUESTOS 
-WHERE fecha between @fechaDesde and @fechaHasta
-------------------------------------------------------------------------------
-GO
-CREATE PROCEDURE SP_FILTRO_CLIENTE
-@cliente varchar(150)
-AS
-SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
-FROM T_PRESUPUESTOS 
-WHERE cliente like @cliente+'%'
-
-exec SP_FILTRO_CLIENTE 'cons'
-------------------------------------------------------------------------------
-GO
 CREATE PROCEDURE SP_BORRAR_DETALLES
 @nroPresupuesto int
 AS
@@ -138,6 +108,64 @@ BEGIN
 	SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
 	FROM T_PRESUPUESTOS
 END
+------------------------------------------------------------------------------
+GO
+CREATE PROCEDURE SP_FILTRO_NROPRESUP
+@nro_presup int
+AS
+SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
+FROM T_PRESUPUESTOS 
+WHERE presupuesto_nro=@nro_presup
+
+exec SP_FILTRO_NROPRESUP 2
+------------------------------------------------------------------------------
+GO
+CREATE PROCEDURE SP_FILTRO_FECHA
+@fechaDesde date,
+@fechaHasta date
+AS
+SET DATEFORMAT dmy
+SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
+FROM T_PRESUPUESTOS 
+WHERE fecha between @fechaDesde and @fechaHasta
+------------------------------------------------------------------------------
+GO
+CREATE PROCEDURE SP_FILTRO_CLIENTE
+@cliente varchar(150)
+AS
+SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
+FROM T_PRESUPUESTOS 
+WHERE cliente like @cliente+'%'
+
+exec SP_FILTRO_CLIENTE 'cons'
+------------------------------------------------------------------------------
+GO
+alter PROCEDURE SP_FILTRO_PRESUPUESTOS
+@nro_presup int=null,
+@fechaDesde date=null,
+@fechaHasta date=null,
+@cliente varchar(150)=null,
+@tipo int=null,
+@activo varchar(1)
+AS
+	if @tipo=0
+		SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
+		FROM T_PRESUPUESTOS
+		WHERE 
+		 ((@fechaDesde is null and @fechaHasta is  null) OR (fecha between @fechaDesde and @fechaHasta))
+		 AND(@nro_presup is null OR presupuesto_nro=@nro_presup)
+		 AND (@activo is null OR (@activo = 'S') OR (@activo = 'N' and fecha_baja IS  NULL))
+	if @tipo=1
+		SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
+		FROM T_PRESUPUESTOS
+		WHERE 
+		 ((@fechaDesde is null and @fechaHasta is  null) OR (fecha between @fechaDesde and @fechaHasta))
+		 AND(@cliente is null OR (cliente like '%' + @cliente + '%'))
+		 AND (@activo is null OR (@activo = 'S') OR (@activo = 'N' and fecha_baja IS  NULL))
+	if @tipo=2
+		SELECT presupuesto_nro,convert(varchar,fecha,3) fecha,cliente,descuento,fecha_baja,total 
+		FROM T_PRESUPUESTOS
+		WHERE fecha_baja is not null
 
 select * from T_DETALLES_PRESUPUESTO
 select * from T_PRESUPUESTOS

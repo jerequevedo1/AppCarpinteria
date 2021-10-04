@@ -29,88 +29,22 @@ namespace WinFormCarpinteria.Formularios
 
 		private void FrmConsultar_Load(object sender, EventArgs e)
 		{
-			ConsultarPresupuestos();
 			CargarTiposFiltros();
-			dtpFechaDesde.Enabled = false;
-			dtpFechaHasta.Enabled = false;
+			CargarFiltroFecha();
+			CargarPresupuestos();
+			CargarPropiedadesGrilla();			
 		}
-		private void btnFiltrar_Click(object sender, EventArgs e)
+		private void btnConsultar_Click(object sender, EventArgs e)
 		{
-			int nroPresup=0;
-			string cliente=string.Empty;
-			DateTime fechaDesde=DateTime.Today;
-			DateTime fechaHasta=DateTime.Today;
-
-			if (txtFiltro.Text.Equals(string.Empty))
-			{
-
-				if (cboFiltro.SelectedIndex != 0 && cboFiltro.SelectedIndex != 4)
-				{
-					MessageBox.Show("Debe ingresar parametros", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-					return;
-				}
-			}
-			else
-			{
-				nroPresup = int.Parse(txtFiltro.Text);
-				cliente = txtFiltro.Text;
-				fechaDesde = dtpFechaDesde.Value;
-				fechaHasta = dtpFechaHasta.Value;
-			}
-
-			List<Presupuesto> lst = new List<Presupuesto>();
-
-			switch (cboFiltro.SelectedIndex)
-			{
-				case 0:
-					lst = gestor.CargarPresupuestos();
-					break;
-				case 1:
-					lst = gestor.FiltrarNroPresupuesto(nroPresup);
-					break;
-				case 2:
-					lst = gestor.FiltrarFecha(fechaDesde,fechaHasta);
-					break;
-				case 3:
-					lst = gestor.FiltrarCliente(cliente);
-					break;
-				case 4:
-					lst = gestor.FiltrarInactivos();
-					break;
-			}
-
-			dgvConsultar.Rows.Clear();
-			CargarGrilla(lst);
-		}
-		private void cboFiltro_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			txtFiltro.Text = string.Empty;
-			if (cboFiltro.SelectedIndex==2)
-			{
-				dtpFechaDesde.Enabled = true;
-				dtpFechaHasta.Enabled = true;
-				txtFiltro.Enabled = false;
-				//txtFiltro.Hide();
-			}
-			else
-			{
-				dtpFechaDesde.Enabled = false;
-				dtpFechaHasta.Enabled = false;
-				txtFiltro.Enabled = true;
-			}
-			if (cboFiltro.SelectedIndex == 4 || cboFiltro.SelectedIndex == 0)
-			{
-				dtpFechaDesde.Enabled = false;
-				dtpFechaHasta.Enabled = false;
-				txtFiltro.Enabled = false;
-			}
+			CargarPresupuestos();
 		}
 		private void btnEliminarFiltro_Click(object sender, EventArgs e)
 		{
 			dgvConsultar.Rows.Clear();
-			ConsultarPresupuestos();
 			txtFiltro.Text = string.Empty;
 			cboFiltro.SelectedIndex = 0;
+			cboFiltrarFecha.SelectedIndex = 4; 
+			CargarPresupuestos();
 		}
 		private void btnCancelar_Click(object sender, EventArgs e)
 		{
@@ -118,7 +52,7 @@ namespace WinFormCarpinteria.Formularios
 		}
 		private void dgvConsultar_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (dgvConsultar.CurrentCell.ColumnIndex==5)
+			if (dgvConsultar.CurrentCell.ColumnIndex==6)
 			{
 				int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
 				FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto(Accion.Read, nroPresupuesto);
@@ -136,15 +70,14 @@ namespace WinFormCarpinteria.Formularios
 		{
 			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto(Accion.Create,0);
 			ofrmPresupuesto.ShowDialog();
-			ConsultarPresupuestos();
+			CargarPresupuestos();
 		}
 		private void btnEditar_Click(object sender, EventArgs e)
 		{
 			int nroPresupuesto = int.Parse(dgvConsultar.CurrentRow.Cells[0].Value.ToString());
 			FrmPresupuesto ofrmPresupuesto = new FrmPresupuesto(Accion.Update, nroPresupuesto);
 			ofrmPresupuesto.ShowDialog();
-
-			ConsultarPresupuestos();
+			CargarPresupuestos();
 		}
 		private void btnBorrar_Click(object sender, EventArgs e)
 		{
@@ -156,7 +89,7 @@ namespace WinFormCarpinteria.Formularios
 				{
 					MessageBox.Show("Presupuesto borrado con exito.", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					dgvConsultar.Rows.Clear();
-					ConsultarPresupuestos();
+					CargarPresupuestos();
 				}
 				else
 				{
@@ -164,28 +97,98 @@ namespace WinFormCarpinteria.Formularios
 				}
 			}
 		}
-
-		private void CargarTiposFiltros()
-		{
-			string[] tiposFiltros = new string[] { "Todo","Numero Presupuesto", "Fecha", "Cliente","Inactivos" };
-			cboFiltro.Items.Clear();
-			cboFiltro.Items.AddRange(tiposFiltros);
-			cboFiltro.SelectedIndex = 0;
-		}
-		private void ConsultarPresupuestos()
-		{
-			List<Presupuesto> lst = new List<Presupuesto>();
-			lst = gestor.CargarPresupuestos();
-			dgvConsultar.Rows.Clear();
-			CargarGrilla(lst);
-		}
 		private void CargarGrilla(List<Presupuesto> lst)
 		{
 			foreach (Presupuesto item in lst)
 			{
-				dgvConsultar.Rows.Add(new object[] { item.PresupuestoNro, item.Fecha.ToString("dd/MM/yyyy"), item.Cliente, item.Descuento + " %", "$ " + item.Total });
+				dgvConsultar.Rows.Add(new object[] { item.PresupuestoNro, item.Fecha.ToString("dd/MM/yyyy"), item.Cliente, item.Descuento + " %", "$ " + item.Total,item.GetFechaBajaFormato() });
 			}
 		}
+		private void dgvConsultar_SelectionChanged(object sender, EventArgs e)
+		{
+			if (dgvConsultar.CurrentRow.Cells["cFechaBaja"].Value.ToString() != "")
+			{
+				btnEditar.Enabled = false;
+				btnBorrar.Enabled = false;
+			}
+			else
+			{
+				btnEditar.Enabled = true;
+				btnBorrar.Enabled = true;
+			}
+		}
+		private void cboFiltrarFecha_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			switch (cboFiltrarFecha.SelectedIndex)
+			{
+				case 0:
+					dtpFechaDesde.Value = DateTime.Today;
+					break;
+				case 1:
+					dtpFechaDesde.Value = DateTime.Today.AddDays(-1);
+					break;
+				case 2:
+					dtpFechaDesde.Value = DateTime.Today.AddDays(-7);
+					break;
+				case 3:
+					dtpFechaDesde.Value = DateTime.Today.AddDays(-14);
+					break;
+				case 4:
+					dtpFechaDesde.Value = DateTime.Today.AddDays(-28);
+					break;
+			}
+		}
+		private void CargarTiposFiltros()
+		{
+			string[] tiposFiltros = new string[] { "Numero Presupuesto", "Cliente", "Inactivos" };
+			cboFiltro.Items.Clear();
+			cboFiltro.Items.AddRange(tiposFiltros);
+			cboFiltro.SelectedIndex = 0;
+		}
+		private void CargarFiltroFecha()
+		{
+			string[] filtrosFecha = new string[] { "Hoy", "Ayer", "Ultimos 7 dias", "Ultimos 14 dias", "Ultimos 28 dias" };
+			cboFiltrarFecha.Items.Clear();
+			cboFiltrarFecha.Items.AddRange(filtrosFecha);
+			cboFiltrarFecha.SelectedIndex = 4;
+		}
+		private void CargarPresupuestos()
+		{
+			List<Parametro> filtros = new List<Parametro>();
+			filtros.Add(new Parametro("@fechaDesde", dtpFechaDesde.Value));
+			filtros.Add(new Parametro("@fechaHasta", dtpFechaHasta.Value));
 
+			object filtroTexto = DBNull.Value;
+			if (!String.IsNullOrEmpty(txtFiltro.Text))
+				filtroTexto = txtFiltro.Text;
+			if (cboFiltro.SelectedIndex == 0)
+			{
+				filtros.Add(new Parametro("@nro_presup", filtroTexto));
+			}
+			else
+			{
+				filtros.Add(new Parametro("@cliente", filtroTexto));
+			}
+
+			string conInactivos = "N";
+			if (chkBajas.Checked)
+				conInactivos = "S";
+			filtros.Add(new Parametro("@activo", conInactivos));
+
+			filtros.Add(new Parametro("@tipo", cboFiltro.SelectedIndex));
+
+			List<Presupuesto> lst = gestor.CargarPresupuestos(filtros);
+
+			dgvConsultar.Rows.Clear();
+			CargarGrilla(lst);
+		}
+		private void CargarPropiedadesGrilla()
+		{
+			dgvConsultar.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dgvConsultar.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dgvConsultar.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dgvConsultar.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			dgvConsultar.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+		}
 	}
 }

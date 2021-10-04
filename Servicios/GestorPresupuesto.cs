@@ -36,34 +36,14 @@ namespace WinFormCarpinteria.Servicios
 		{
 			return dao.ConsultarProductos();
 		}
-
-		public List<Presupuesto> CargarPresupuestos()
+		public List<Presupuesto> CargarPresupuestos(List<Parametro> parametros)
 		{
-			return dao.ConsultarPresupuestos();
+			return dao.ConsultarPresupuestos(parametros);
 		}
-		public Presupuesto CargarPresupuesto(int nroPresupuesto)
+		public Presupuesto CargarPresupuestoPorNro(int nroPresupuesto)
 		{
 			return dao.ConsultarUnPresupuesto(nroPresupuesto);
 		}
-		public List<Presupuesto> FiltrarNroPresupuesto(int nroPresupuesto)
-		{
-			return dao.ConsultarPresupuestoNroPresupuesto(nroPresupuesto);
-		}
-		public List<Presupuesto> FiltrarFecha(DateTime fechaDesde, DateTime fechaHasta)
-		{
-			return dao.ConsultarPresupuestoFecha(fechaDesde,fechaHasta);
-		}
-		public List<Presupuesto> FiltrarCliente(string cliente)
-		{
-			return dao.ConsultarPresupuestoCliente(cliente);
-		}
-		public List<Presupuesto> FiltrarInactivos()
-		{
-			return dao.ConsultarPresupuestoInactivo();
-		}
-		public List<Presupuesto> CargarPresupConInactivos()
-		{
-			return dao.ConsultarPresupuestoConInactivo();
-		}
 	}
+
 }
