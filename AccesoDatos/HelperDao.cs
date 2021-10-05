@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WinFormCarpinteria.Servicios;
 
 namespace WinFormCarpinteria.AccesoDatos
 {
@@ -76,29 +77,69 @@ namespace WinFormCarpinteria.AccesoDatos
 					cnn.Close();
 			}
 		}
-		public int EjecutarSQL(string nombreSP)
+		public int EjecutarSQLParametrosEntrada(string sentencia, List<Parametro> parametros)
 		{
 			int filasAfectadas = 0;
+			SqlTransaction trans = null;
+			try
+			{
+				cmd.Parameters.Clear();
+				cnn.Open();
+				trans = cnn.BeginTransaction();
+				cmd.Connection = cnn;
+				cmd.Transaction = trans;
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.CommandText = sentencia;
+
+				foreach (Parametro p in parametros)
+				{
+					cmd.Parameters.AddWithValue(p.Nombre, p.Valor);
+				}
+				filasAfectadas = cmd.ExecuteNonQuery();
+				trans.Commit();
+			}
+			catch //(Exception ex)
+			{
+				filasAfectadas = 0;
+				trans.Rollback();
+				//throw ex;
+			}
+			finally
+			{
+				if (cnn.State == ConnectionState.Open) cnn.Close();
+			}
+			return filasAfectadas;
+		}
+
+		public DataTable ConsultaSQLParametrosEntrada(string consulta,List<Parametro> parametros)
+		{
+			DataTable tabla = new DataTable();
 			try
 			{
 				cmd.Parameters.Clear();
 				cnn.Open();
 				cmd.Connection = cnn;
 				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.CommandText = nombreSP;
-				filasAfectadas=cmd.ExecuteNonQuery();
+				cmd.CommandText = consulta;
+
+				foreach (Parametro p in parametros)
+				{
+					cmd.Parameters.AddWithValue(p.Nombre, p.Valor);
+				}
+
+				tabla.Load(cmd.ExecuteReader());
 			}
-			catch (Exception ex)
+			catch //(Exception ex)
 			{
-				throw ex;
+				//throw ex;
+				tabla = null;
 			}
 			finally
 			{
-				if (cnn.State == ConnectionState.Open)
-					cnn.Close();
+				if (cnn.State == ConnectionState.Open) cnn.Close();
 			}
-			return filasAfectadas;
-		}
 
+			return tabla;
+		}
 	}
 }

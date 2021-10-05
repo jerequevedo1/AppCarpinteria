@@ -74,7 +74,15 @@ namespace WinFormCarpinteria.AccesoDatos
 		{
 
 			bool resultado = true;
+			//int filasAfectadas = 0;
+			//List<Parametro> parametros = new List<Parametro>();
+			//parametros.Add(new Parametro("@nro_presupuesto", oPresupuesto.PresupuestoNro));
+			//parametros.Add(new Parametro("@fecha", oPresupuesto.Fecha));
+			//parametros.Add(new Parametro("@cliente", oPresupuesto.Cliente));
+			//parametros.Add(new Parametro("@descuento", oPresupuesto.Descuento));
+			//parametros.Add(new Parametro("@total", oPresupuesto.Total));
 
+			//HelperDao.ObtenerInstancia().EjecutarSQLParametrosEntrada("SP_EDITAR_PRESUPUESTO", parametros);
 			SqlConnection cnn = new SqlConnection();
 			SqlTransaction trans = null;
 
@@ -96,7 +104,10 @@ namespace WinFormCarpinteria.AccesoDatos
 				cmd.ExecuteNonQuery();
 
 				int detalleNro = 1;
-		
+
+				//parametros.Clear();
+				//parametros.Add(new Parametro("@nro_presupuesto", oPresupuesto.PresupuestoNro));
+				//HelperDao.ObtenerInstancia().EjecutarSQLParametrosEntrada("SP_BORRAR_DETALLES", parametros);
 				SqlCommand cmdBorrado = new SqlCommand();
 				cmdBorrado.Connection = cnn;
 				cmdBorrado.Transaction = trans;
@@ -106,7 +117,7 @@ namespace WinFormCarpinteria.AccesoDatos
 				cmdBorrado.ExecuteNonQuery();
 
 				foreach (DetallePresupuesto item in oPresupuesto.Detalles)
-				{
+			{
 					SqlCommand cmdDet = new SqlCommand();
 					cmdDet.Connection = cnn;
 					cmdDet.Transaction = trans;
@@ -117,14 +128,20 @@ namespace WinFormCarpinteria.AccesoDatos
 					cmdDet.Parameters.AddWithValue("@id_producto", item.Producto.IdProducto);
 					cmdDet.Parameters.AddWithValue("@cantidad", item.Cantidad);
 					cmdDet.ExecuteNonQuery();
+					//parametros.Clear();
+					//parametros.Add(new Parametro("@nro_presupuesto", oPresupuesto.PresupuestoNro));
+					//parametros.Add(new Parametro("@detalle", detalleNro));
+					//parametros.Add(new Parametro("@id_producto", item.Producto.IdProducto));
+					//parametros.Add(new Parametro("@cantidad", item.Cantidad));
+					//filasAfectadas=HelperDao.ObtenerInstancia().EjecutarSQLParametrosEntrada("SP_INSERTAR_DETALLE", parametros);
 					detalleNro++;
-				}
+			}
 
 				trans.Commit();
 			}
 			catch (Exception e)
 			{
-				string mensaje=e.Message;
+				string mensaje = e.Message;
 				trans.Rollback();
 				resultado = false;
 			}
@@ -137,33 +154,15 @@ namespace WinFormCarpinteria.AccesoDatos
 		}
 		public bool BorrarPresupuesto(int nroPresupuesto)
 		{
-			SqlConnection cnn = new SqlConnection();
-			SqlTransaction trans = null;
-			bool resultado = true;
-			try 
-			{ 
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			trans = cnn.BeginTransaction();
-			SqlCommand cmd = new SqlCommand();
-			cmd.Connection = cnn;
-			cmd.Transaction = trans;
-			cmd.CommandText = "SP_BAJA_PRESUPUESTO";
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.Parameters.AddWithValue("@nroPresupuesto", nroPresupuesto);
-			cmd.ExecuteNonQuery();
+			List<Parametro> parametros = new List<Parametro>();
+			parametros.Add(new Parametro("@nroPresupuesto", nroPresupuesto));
 
-			trans.Commit();
-			}
-			catch
-			{
-				trans.Rollback();
-				resultado = false;
-			}
-			finally
-			{
-				if (cnn != null && cnn.State == ConnectionState.Open) cnn.Close();
-			}
+			bool resultado = true;
+			int filasAfectadas = 0;
+
+			filasAfectadas = HelperDao.ObtenerInstancia().EjecutarSQLParametrosEntrada("SP_BAJA_PRESUPUESTO", parametros);
+
+			if (filasAfectadas == 0) resultado = false;
 
 			return resultado;
 		}
@@ -173,8 +172,8 @@ namespace WinFormCarpinteria.AccesoDatos
 		}
 		public List<Producto> ConsultarProductos()
 		{
-			DataTable tabla = HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRODUCTOS");
 			List<Producto> lst = new List<Producto>();
+			DataTable tabla = HelperDao.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRODUCTOS");
 			foreach (DataRow row in tabla.Rows)
 			{
 				Producto oProducto = new Producto();
@@ -187,25 +186,15 @@ namespace WinFormCarpinteria.AccesoDatos
 			}
 			return lst;
 		}
-		public List<Presupuesto> ConsultarPresupuestos(List<Parametro> criterios)
+		public List<Presupuesto> ConsultarPresupuestos(List<Parametro> parametros)
 		{
 			List<Presupuesto> lst = new List<Presupuesto>();
-			DataTable table = new DataTable();
-			SqlConnection cnn = new SqlConnection(@"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True");
+			DataTable tabla = new DataTable();
 			try
 			{
-				cnn.Open();
+				tabla = HelperDao.ObtenerInstancia().ConsultaSQLParametrosEntrada("SP_FILTRO_PRESUPUESTOS", parametros);
 
-				SqlCommand cmd = new SqlCommand("SP_FILTRO_PRESUPUESTOS", cnn);
-				cmd.CommandType = CommandType.StoredProcedure;
-				foreach (Parametro p in criterios)
-				{
-					cmd.Parameters.AddWithValue(p.Nombre, p.Valor);
-				}
-
-				table.Load(cmd.ExecuteReader());
-
-				foreach (DataRow row in table.Rows)
+				foreach (DataRow row in tabla.Rows)
 				{
 					Presupuesto oPresupuesto = new Presupuesto();
 					oPresupuesto.Cliente = row["cliente"].ToString();
@@ -219,8 +208,6 @@ namespace WinFormCarpinteria.AccesoDatos
 
 					lst.Add(oPresupuesto);
 				}
-
-				cnn.Close();
 			}
 			catch (SqlException)
 			{
@@ -231,17 +218,15 @@ namespace WinFormCarpinteria.AccesoDatos
 		public Presupuesto ConsultarUnPresupuesto(int nroPresupuesto)
 		{
 			Presupuesto oPresupuesto = new Presupuesto();
-			SqlConnection cnn = new SqlConnection();
-			cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-			cnn.Open();
-			SqlCommand cmd = new SqlCommand();
-			cmd.Connection = cnn;
-			cmd.CommandType = CommandType.StoredProcedure;
-			cmd.CommandText = "SP_CONSULTAR_PRESUPUESTO_POR_ID";
-			cmd.Parameters.AddWithValue("@nro", nroPresupuesto);
-			SqlDataReader lector = cmd.ExecuteReader();
+			DataTable tabla = new DataTable();
+			List<Parametro> parametros = new List<Parametro>();
+			parametros.Add(new Parametro("@nro", nroPresupuesto));
+
+			tabla = HelperDao.ObtenerInstancia().ConsultaSQLParametrosEntrada("SP_CONSULTAR_PRESUPUESTO_POR_ID", parametros);
 
 			bool primerRegistro = true;
+
+			DataTableReader lector = tabla.CreateDataReader();
 
 			while (lector.Read())
 			{
@@ -277,7 +262,6 @@ namespace WinFormCarpinteria.AccesoDatos
 
 				oPresupuesto.AgregarDetalle(oDetalle);
 			}
-			cnn.Close();
 			return oPresupuesto;
 		}
 	}

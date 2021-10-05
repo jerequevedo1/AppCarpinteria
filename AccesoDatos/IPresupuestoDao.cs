@@ -12,7 +12,7 @@ namespace WinFormCarpinteria.AccesoDatos
 		bool BorrarPresupuesto(int nroPresupuesto);
 		int ObtenerProximoNumero();
 		List<Producto> ConsultarProductos();
-		List<Presupuesto> ConsultarPresupuestos(List<Parametro> criterios);
+		List<Presupuesto> ConsultarPresupuestos(List<Parametro> parametros);
 		Presupuesto ConsultarUnPresupuesto(int nroPresupuesto);
 	}
 }
