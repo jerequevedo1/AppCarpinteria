@@ -13,33 +13,33 @@ WHERE TABLE_NAME = 'T_PRESUPUESTOS' AND ORDINAL_POSITION in (1,2,3,6)
 
 EXEC SP_TIPOS_FILTROS
 ------------------------------------------------------------------------------
-GO
-CREATE PROCEDURE SP_BORRAR_DETALLES
-@nroPresupuesto int
-AS
-DELETE FROM T_DETALLES_PRESUPUESTO WHERE presupuesto_nro=@nroPresupuesto
+--GO
+--CREATE PROCEDURE SP_BORRAR_DETALLES --NO LO USE MAS LO SUME AL SP EDITAR PRESUPUESTO
+--@nroPresupuesto int
+--AS
+--DELETE FROM T_DETALLES_PRESUPUESTO WHERE presupuesto_nro=@nroPresupuesto
 ------------------------------------------------------------------------------
-GO
-CREATE PROCEDURE SP_BORRAR_PRESUPUESTO
-@nroPresupuesto int
-AS
-DELETE FROM T_PRESUPUESTOS WHERE presupuesto_nro=@nroPresupuesto
+--GO
+--DROP PROCEDURE SP_BORRAR_PRESUPUESTO --SE USA BORRADO LOGICO EN SU LUGAR
+--@nroPresupuesto int
+--AS
+--DELETE FROM T_PRESUPUESTOS WHERE presupuesto_nro=@nroPresupuesto
+
+------------------------------------------------------------------------------
+--GO
+--DROP PROCEDURE SP_CONSULTAR_DETALLES --NO LO TERMINE USANDO
+--@nro_presupuesto int
+--AS
+--select detalle_nro,n_producto PRODUCTO,precio PRECIO,cantidad CANTIDAD 
+--from T_PRODUCTOS p join T_DETALLES_PRESUPUESTO d on p.id_producto=d.id_producto join T_PRESUPUESTOS pr 
+--	on d.presupuesto_nro=pr.presupuesto_nro 
+--where pr.presupuesto_nro=@nro_presupuesto
+
+--EXEC SP_CONSULTAR_DETALLES 10
 
 ------------------------------------------------------------------------------
 GO
-CREATE PROCEDURE dbo.SP_CONSULTAR_DETALLES --NO LO TERMINE USANDO
-@nro_presupuesto int
-AS
-select detalle_nro,n_producto PRODUCTO,precio PRECIO,cantidad CANTIDAD 
-from T_PRODUCTOS p join T_DETALLES_PRESUPUESTO d on p.id_producto=d.id_producto join T_PRESUPUESTOS pr 
-	on d.presupuesto_nro=pr.presupuesto_nro 
-where pr.presupuesto_nro=@nro_presupuesto
-
-EXEC SP_CONSULTAR_DETALLES 10
-GO
-------------------------------------------------------------------------------
-
-CREATE PROCEDURE dbo.SP_EDITAR_PRESUPUESTO
+ALTER PROCEDURE dbo.SP_EDITAR_PRESUPUESTO
 @nro_presupuesto int,
 @fecha date,
 @cliente varchar(255)=null,
@@ -47,9 +47,12 @@ CREATE PROCEDURE dbo.SP_EDITAR_PRESUPUESTO
 @fecha_baja date=null,
 @total numeric(8,2)
 AS
+BEGIN
 UPDATE T_PRESUPUESTOS
 SET fecha=@fecha,cliente=@cliente,descuento=@descuento,fecha_baja=@fecha_baja,total=@total
 WHERE presupuesto_nro=@nro_presupuesto
+DELETE FROM T_DETALLES_PRESUPUESTO WHERE presupuesto_nro=@nro_presupuesto
+END
 GO
 ------------------------------------------------------------------------------
 CREATE PROCEDURE dbo.SP_EDITAR_DETALLES_PRESUPUESTO --no lo use al final, falta resolver este tema

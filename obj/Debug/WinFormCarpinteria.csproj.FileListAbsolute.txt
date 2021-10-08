@@ -66,7 +66,6 @@ D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClas
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\bin\Debug\ru\Microsoft.ReportViewer.WinForms.resources.dll
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\bin\Debug\zh-CHS\Microsoft.ReportViewer.WinForms.resources.dll
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\bin\Debug\zh-CHT\Microsoft.ReportViewer.WinForms.resources.dll
-D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.csproj.CopyComplete
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.Formularios.FrmConsultar.resources
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\WinFormCarpinteria.Formularios.FrmReporteProductos.resources
 D:\Documents\TUP\2do Cuatrimestre\Programacion 2\Proyectos\WinFormEjerciciosClase\WinFormCarpinteria\obj\Debug\RdlCompile.cache

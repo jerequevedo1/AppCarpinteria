@@ -6,149 +6,164 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WinFormCarpinteria.Servicios;
+using static WinFormCarpinteria.Formularios.FrmPresupuesto;
 
 namespace WinFormCarpinteria.AccesoDatos
 {
 	class PresupuestoDao : IPresupuestoDao
 	{
+		//public bool InsertarPresupuesto(Presupuesto oPresupuesto)
+		//{
+		//	bool resultado = true;
+
+		//	SqlConnection cnn = new SqlConnection();
+		//	SqlTransaction trans = null;
+
+		//	try
+		//	{
+		//		cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+		//		cnn.Open();
+		//		trans = cnn.BeginTransaction();
+		//		SqlCommand cmd = new SqlCommand();
+		//		cmd.Connection = cnn;
+		//		cmd.Transaction = trans;
+		//		cmd.CommandText = "SP_INSERTAR_MAESTRO";
+		//		cmd.CommandType = CommandType.StoredProcedure;
+		//		cmd.Parameters.AddWithValue("@cliente", oPresupuesto.Cliente);
+		//		cmd.Parameters.AddWithValue("@dto", oPresupuesto.Descuento);
+		//		cmd.Parameters.AddWithValue("@total", oPresupuesto.Total);
+		//		SqlParameter parameter = new SqlParameter("@presupuesto_nro", SqlDbType.Int);
+		//		parameter.Direction = ParameterDirection.Output;
+		//		cmd.Parameters.Add(parameter);
+		//		cmd.ExecuteNonQuery();
+
+		//		oPresupuesto.PresupuestoNro = Convert.ToInt32(parameter.Value);
+		//		int detalleNro = 1;
+
+		//		foreach (DetallePresupuesto item in oPresupuesto.Detalles)
+		//		{
+		//			SqlCommand cmdDet = new SqlCommand();
+		//			cmdDet.Connection = cnn;
+		//			cmdDet.Transaction = trans;
+		//			cmdDet.CommandText = "SP_INSERTAR_DETALLE";
+		//			cmdDet.CommandType = CommandType.StoredProcedure;
+		//			cmdDet.Parameters.AddWithValue("@presupuesto_nro", oPresupuesto.PresupuestoNro);
+		//			cmdDet.Parameters.AddWithValue("@detalle", detalleNro);
+		//			cmdDet.Parameters.AddWithValue("@id_producto", item.Producto.IdProducto);
+		//			cmdDet.Parameters.AddWithValue("@cantidad", item.Cantidad);
+		//			cmdDet.ExecuteNonQuery();
+		//			detalleNro++;
+		//		}
+
+		//		trans.Commit();
+		//	}
+		//	catch (Exception)
+		//	{
+		//		//en caso que quiera saber que error ocurre
+		//		//MessageBox.Show("error: " + E.Message);
+		//		trans.Rollback();
+		//		resultado = false;
+		//	}
+		//	finally
+		//	{
+		//		if (cnn != null && cnn.State == ConnectionState.Open) cnn.Close();
+		//	}
+
+		//	return resultado;
+		//}
 		public bool InsertarPresupuesto(Presupuesto oPresupuesto)
 		{
 			bool resultado = true;
+			int filasAfectadas = 0;
+			//List<Parametro> parametrosMaestro = new List<Parametro>();
+			//parametrosMaestro.Add(new Parametro("@cliente", oPresupuesto.Cliente));
+			//parametrosMaestro.Add(new Parametro("@dto", oPresupuesto.Descuento));
+			//parametrosMaestro.Add(new Parametro("@total", oPresupuesto.Total));
 
-			SqlConnection cnn = new SqlConnection();
-			SqlTransaction trans = null;
+			filasAfectadas = HelperDao.ObtenerInstancia().EjecutarSQLMaestroDetalle("SP_INSERTAR_MAESTRO", "SP_INSERTAR_DETALLE", oPresupuesto, Accion.Create);
 
-			try
-			{
-				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-				cnn.Open();
-				trans = cnn.BeginTransaction();
-				SqlCommand cmd = new SqlCommand();
-				cmd.Connection = cnn;
-				cmd.Transaction = trans;
-				cmd.CommandText = "SP_INSERTAR_MAESTRO";
-				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.Parameters.AddWithValue("@cliente", oPresupuesto.Cliente);
-				cmd.Parameters.AddWithValue("@dto", oPresupuesto.Descuento);
-				cmd.Parameters.AddWithValue("@total", oPresupuesto.Total);
-				SqlParameter parameter = new SqlParameter("@presupuesto_nro", SqlDbType.Int);
-				parameter.Direction = ParameterDirection.Output;
-				cmd.Parameters.Add(parameter);
-				cmd.ExecuteNonQuery();
-
-				oPresupuesto.PresupuestoNro = Convert.ToInt32(parameter.Value);
-				int detalleNro = 1;
-
-				foreach (DetallePresupuesto item in oPresupuesto.Detalles)
-				{
-					SqlCommand cmdDet = new SqlCommand();
-					cmdDet.Connection = cnn;
-					cmdDet.Transaction = trans;
-					cmdDet.CommandText = "SP_INSERTAR_DETALLE";
-					cmdDet.CommandType = CommandType.StoredProcedure;
-					cmdDet.Parameters.AddWithValue("@presupuesto_nro", oPresupuesto.PresupuestoNro);
-					cmdDet.Parameters.AddWithValue("@detalle", detalleNro);
-					cmdDet.Parameters.AddWithValue("@id_producto", item.Producto.IdProducto);
-					cmdDet.Parameters.AddWithValue("@cantidad", item.Cantidad);
-					cmdDet.ExecuteNonQuery();
-					detalleNro++;
-				}
-
-				trans.Commit();
-			}
-			catch (Exception)
-			{
-				//en caso que quiera saber que error ocurre
-				//MessageBox.Show("error: " + E.Message);
-				trans.Rollback();
-				resultado = false;
-			}
-			finally
-			{
-				if (cnn != null && cnn.State == ConnectionState.Open) cnn.Close();
-			}
+			if (filasAfectadas == 0) resultado = false;
 
 			return resultado;
 		}
+		//public bool EditarPresupuesto(Presupuesto oPresupuesto)
+		//{
+
+		//	bool resultado = true;
+		//	SqlConnection cnn = new SqlConnection();
+		//	SqlTransaction trans = null;
+
+		//	try
+		//	{
+		//		cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
+		//		cnn.Open();
+		//		trans = cnn.BeginTransaction();
+		//		SqlCommand cmd = new SqlCommand();
+		//		cmd.Connection = cnn;
+		//		cmd.Transaction = trans;
+		//		cmd.CommandText = "SP_EDITAR_PRESUPUESTO";
+		//		cmd.CommandType = CommandType.StoredProcedure;
+		//		cmd.Parameters.AddWithValue("@nro_presupuesto", oPresupuesto.PresupuestoNro);
+		//		cmd.Parameters.AddWithValue("@fecha", oPresupuesto.Fecha);
+		//		cmd.Parameters.AddWithValue("@cliente", oPresupuesto.Cliente);
+		//		cmd.Parameters.AddWithValue("@descuento", oPresupuesto.Descuento);
+		//		cmd.Parameters.AddWithValue("@total", oPresupuesto.Total);
+		//		cmd.ExecuteNonQuery();
+
+		//		int detalleNro = 1;
+
+		//		SqlCommand cmdBorrado = new SqlCommand();
+		//		cmdBorrado.Connection = cnn;
+		//		cmdBorrado.Transaction = trans;
+		//		cmdBorrado.CommandText = "SP_BORRAR_DETALLES";
+		//		cmdBorrado.CommandType = CommandType.StoredProcedure;
+		//		cmdBorrado.Parameters.AddWithValue("@nroPresupuesto", oPresupuesto.PresupuestoNro);
+		//		cmdBorrado.ExecuteNonQuery();
+
+		//		foreach (DetallePresupuesto item in oPresupuesto.Detalles)
+		//	{
+		//			SqlCommand cmdDet = new SqlCommand();
+		//			cmdDet.Connection = cnn;
+		//			cmdDet.Transaction = trans;
+		//			cmdDet.CommandText = "SP_INSERTAR_DETALLE";
+		//			cmdDet.CommandType = CommandType.StoredProcedure;
+		//			cmdDet.Parameters.AddWithValue("@presupuesto_nro", oPresupuesto.PresupuestoNro);
+		//			cmdDet.Parameters.AddWithValue("@detalle", detalleNro);
+		//			cmdDet.Parameters.AddWithValue("@id_producto", item.Producto.IdProducto);
+		//			cmdDet.Parameters.AddWithValue("@cantidad", item.Cantidad);
+		//			cmdDet.ExecuteNonQuery();
+		//			detalleNro++;
+		//	}
+
+		//		trans.Commit();
+		//	}
+		//	catch (Exception e)
+		//	{
+		//		string mensaje = e.Message;
+		//		trans.Rollback();
+		//		resultado = false;
+		//	}
+		//	finally
+		//	{
+		//		if (cnn != null && cnn.State == ConnectionState.Open) cnn.Close();
+		//	}
+
+		//	return resultado;
+		//}
 		public bool EditarPresupuesto(Presupuesto oPresupuesto)
 		{
-
 			bool resultado = true;
-			//int filasAfectadas = 0;
-			//List<Parametro> parametros = new List<Parametro>();
-			//parametros.Add(new Parametro("@nro_presupuesto", oPresupuesto.PresupuestoNro));
-			//parametros.Add(new Parametro("@fecha", oPresupuesto.Fecha));
-			//parametros.Add(new Parametro("@cliente", oPresupuesto.Cliente));
-			//parametros.Add(new Parametro("@descuento", oPresupuesto.Descuento));
-			//parametros.Add(new Parametro("@total", oPresupuesto.Total));
+			int filasAfectadas = 0;
+			//List<Parametro> parametrosMaestro = new List<Parametro>();
+			//parametrosMaestro.Add(new Parametro("@nro_presupuesto", oPresupuesto.PresupuestoNro));
+			//parametrosMaestro.Add(new Parametro("@fecha", oPresupuesto.Fecha));
+			//parametrosMaestro.Add(new Parametro("@cliente", oPresupuesto.Cliente));
+			//parametrosMaestro.Add(new Parametro("@descuento", oPresupuesto.Descuento));
+			//parametrosMaestro.Add(new Parametro("@total", oPresupuesto.Total));
 
-			//HelperDao.ObtenerInstancia().EjecutarSQLParametrosEntrada("SP_EDITAR_PRESUPUESTO", parametros);
-			SqlConnection cnn = new SqlConnection();
-			SqlTransaction trans = null;
-
-			try
-			{
-				cnn.ConnectionString = @"Data Source=NOTEBOOK-JERE\SQLEXPRESS;Initial Catalog=carpinteria_db;Integrated Security=True";
-				cnn.Open();
-				trans = cnn.BeginTransaction();
-				SqlCommand cmd = new SqlCommand();
-				cmd.Connection = cnn;
-				cmd.Transaction = trans;
-				cmd.CommandText = "SP_EDITAR_PRESUPUESTO";
-				cmd.CommandType = CommandType.StoredProcedure;
-				cmd.Parameters.AddWithValue("@nro_presupuesto", oPresupuesto.PresupuestoNro);
-				cmd.Parameters.AddWithValue("@fecha", oPresupuesto.Fecha);
-				cmd.Parameters.AddWithValue("@cliente", oPresupuesto.Cliente);
-				cmd.Parameters.AddWithValue("@descuento", oPresupuesto.Descuento);
-				cmd.Parameters.AddWithValue("@total", oPresupuesto.Total);
-				cmd.ExecuteNonQuery();
-
-				int detalleNro = 1;
-
-				//parametros.Clear();
-				//parametros.Add(new Parametro("@nro_presupuesto", oPresupuesto.PresupuestoNro));
-				//HelperDao.ObtenerInstancia().EjecutarSQLParametrosEntrada("SP_BORRAR_DETALLES", parametros);
-				SqlCommand cmdBorrado = new SqlCommand();
-				cmdBorrado.Connection = cnn;
-				cmdBorrado.Transaction = trans;
-				cmdBorrado.CommandText = "SP_BORRAR_DETALLES";
-				cmdBorrado.CommandType = CommandType.StoredProcedure;
-				cmdBorrado.Parameters.AddWithValue("@nroPresupuesto", oPresupuesto.PresupuestoNro);
-				cmdBorrado.ExecuteNonQuery();
-
-				foreach (DetallePresupuesto item in oPresupuesto.Detalles)
-			{
-					SqlCommand cmdDet = new SqlCommand();
-					cmdDet.Connection = cnn;
-					cmdDet.Transaction = trans;
-					cmdDet.CommandText = "SP_INSERTAR_DETALLE";
-					cmdDet.CommandType = CommandType.StoredProcedure;
-					cmdDet.Parameters.AddWithValue("@presupuesto_nro", oPresupuesto.PresupuestoNro);
-					cmdDet.Parameters.AddWithValue("@detalle", detalleNro);
-					cmdDet.Parameters.AddWithValue("@id_producto", item.Producto.IdProducto);
-					cmdDet.Parameters.AddWithValue("@cantidad", item.Cantidad);
-					cmdDet.ExecuteNonQuery();
-					//parametros.Clear();
-					//parametros.Add(new Parametro("@nro_presupuesto", oPresupuesto.PresupuestoNro));
-					//parametros.Add(new Parametro("@detalle", detalleNro));
-					//parametros.Add(new Parametro("@id_producto", item.Producto.IdProducto));
-					//parametros.Add(new Parametro("@cantidad", item.Cantidad));
-					//filasAfectadas=HelperDao.ObtenerInstancia().EjecutarSQLParametrosEntrada("SP_INSERTAR_DETALLE", parametros);
-					detalleNro++;
-			}
-
-				trans.Commit();
-			}
-			catch (Exception e)
-			{
-				string mensaje = e.Message;
-				trans.Rollback();
-				resultado = false;
-			}
-			finally
-			{
-				if (cnn != null && cnn.State == ConnectionState.Open) cnn.Close();
-			}
+			filasAfectadas = HelperDao.ObtenerInstancia().EjecutarSQLMaestroDetalle("SP_EDITAR_PRESUPUESTO", "SP_INSERTAR_DETALLE", oPresupuesto,Accion.Update);
+			
+			if (filasAfectadas == 0) resultado = false;
 
 			return resultado;
 		}

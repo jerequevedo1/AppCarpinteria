@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinFormCarpinteria.AccesoDatos;
-using WinFormCarpinteria.Entidades;
 using WinFormCarpinteria.Formularios;
 using WinFormCarpinteria.Servicios;
 using static WinFormCarpinteria.Formularios.FrmPresupuesto;
@@ -19,12 +18,10 @@ namespace WinFormCarpinteria.Formularios
 	public partial class FrmConsultar : Form
 	{
 		private GestorPresupuesto gestor;
-		private ListadoPresupuestos presupuestos;
 		public FrmConsultar()
 		{
 			InitializeComponent();
 			gestor = new GestorPresupuesto(new DaoFactory());
-			presupuestos = new ListadoPresupuestos();
 		}
 
 		private void FrmConsultar_Load(object sender, EventArgs e)
