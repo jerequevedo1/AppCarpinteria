@@ -45,9 +45,9 @@ namespace WinFormCarpinteria.AccesoDatos
 				cmd.ExecuteNonQuery();
 				return (int)param.Value;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				throw ex;
+				return 0;
 			}
 			finally
 			{
@@ -96,9 +96,8 @@ namespace WinFormCarpinteria.AccesoDatos
 
 				tabla.Load(cmd.ExecuteReader());
 			}
-			catch //(Exception ex)
+			catch (Exception)
 			{
-				//throw ex;
 				tabla = null;
 			}
 			finally
@@ -111,14 +110,11 @@ namespace WinFormCarpinteria.AccesoDatos
 		public int EjecutarSQLParametrosEntrada(string sentencia, List<Parametro> parametros)
 		{
 			int filasAfectadas = 0;
-			//SqlTransaction trans = null;
 			try
 			{
 				cmd.Parameters.Clear();
 				cnn.Open();
-				//trans = cnn.BeginTransaction();
 				cmd.Connection = cnn;
-				//cmd.Transaction = trans;
 				cmd.CommandType = CommandType.StoredProcedure;
 				cmd.CommandText = sentencia;
 
@@ -127,13 +123,10 @@ namespace WinFormCarpinteria.AccesoDatos
 					cmd.Parameters.AddWithValue(p.Nombre, p.Valor);
 				}
 				filasAfectadas = cmd.ExecuteNonQuery();
-				//trans.Commit();
 			}
-			catch //(Exception ex)
+			catch (Exception)
 			{
 				filasAfectadas = 0;
-				//trans.Rollback();
-				//throw ex;
 			}
 			finally
 			{
@@ -198,10 +191,8 @@ namespace WinFormCarpinteria.AccesoDatos
 
 				trans.Commit();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw e;
-				string mensaje = e.Message;
 				trans.Rollback();
 				filasAfectadas = 0;
 			}

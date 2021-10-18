@@ -17,7 +17,6 @@ namespace WinFormCarpinteria.Formularios
 	{
 		private Presupuesto oPresupuesto;
 		private GestorPresupuesto gestor;
-
 		private Accion modo;
 
 		public FrmPresupuesto(Accion modo,int nro)
@@ -38,7 +37,6 @@ namespace WinFormCarpinteria.Formularios
 				Text = "Editar Presupuesto";
 				CargarPresupuesto(nro);
 			}
-			CargarPropiedadesGrilla();
 		}
 
 		public enum Accion
@@ -49,6 +47,7 @@ namespace WinFormCarpinteria.Formularios
 			Delete
 		}
 
+		//Load del form
 		private void FrmNuevoPresupuesto_Load(object sender, EventArgs e)
 		{
 			CargarProductos();
@@ -60,7 +59,10 @@ namespace WinFormCarpinteria.Formularios
 				txtCliente.Text = "Consumidor Final";
 				txtDescuento.Text = "0";
 			}
+			CargarPropiedadesGrilla();
 		}
+		
+		//Boton agregar producto a la grilla
 		private void btnAgregar_Click(object sender, EventArgs e)
 		{
 			if (cboProducto.Text.Equals(string.Empty))
@@ -93,6 +95,8 @@ namespace WinFormCarpinteria.Formularios
 
 			CalcularTotales();
 		}
+
+		//Boton quitar producto de la grilla
 		private void dgvDetalles_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			if (dgvDetalles.CurrentCell.ColumnIndex == 5)
@@ -102,10 +106,14 @@ namespace WinFormCarpinteria.Formularios
 				CalcularTotales();
 			}
 		}
+
+		//Boton cancelar para salir
 		private void btnCancelar_Click(object sender, EventArgs e)
 		{
 			Close();
 		}
+
+		//Boton aceptar para confirmar y guardar el presupuesto
 		private void btnAceptar_Click(object sender, EventArgs e)
 		{
 			if (txtCliente.Text=="")
@@ -124,7 +132,6 @@ namespace WinFormCarpinteria.Formularios
 			CalcularTotales();
 			GuardarPresupuesto();
 		}
-
 		private void GuardarPresupuesto()
 		{
 			oPresupuesto.Fecha = Convert.ToDateTime(txtFecha.Text);
@@ -159,6 +166,8 @@ namespace WinFormCarpinteria.Formularios
 
 			
 		}
+		
+		//Metodo para cargar Productos al combobox en el evento Load
 		private void CargarProductos()
 		{
 			List<Producto> lst = gestor.ObtenerProductos();
@@ -166,6 +175,8 @@ namespace WinFormCarpinteria.Formularios
 			cboProducto.ValueMember = "IdProducto";
 			cboProducto.DisplayMember = "NProducto";
 		}
+
+		//Metodo para calcular totales
 		private void CalcularTotales()
 		{
 			txtSubtotal.Text = oPresupuesto.CalcularTotal().ToString();
@@ -173,6 +184,8 @@ namespace WinFormCarpinteria.Formularios
 			txtTotalDescuento.Text = desc.ToString();
 			txtTotal.Text = (oPresupuesto.CalcularTotal() - desc).ToString();
 		}
+
+		//Metodo para cargar presupuesto x al instanciar el form
 		private void CargarPresupuesto(int nroPresupuesto)
 		{
 			oPresupuesto = gestor.CargarPresupuestoPorNro(nroPresupuesto);
@@ -190,6 +203,8 @@ namespace WinFormCarpinteria.Formularios
 
 			CalcularTotales();
 		}
+
+		//Metodo para setear controles del form al entrar al modo Read
 		private void HabilitarConsulta()
 		{
 				btnAceptar.Hide();
@@ -200,6 +215,8 @@ namespace WinFormCarpinteria.Formularios
 				btnAgregar.Enabled = false;
 				dgvDetalles.Enabled = false;
 		}
+
+		//Metodo para setear la forma de ver los datos en la grilla
 		private void CargarPropiedadesGrilla()
 		{
 			dgvDetalles.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
