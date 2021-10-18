@@ -8,7 +8,6 @@ namespace WinFormCarpinteria
 {
 	class Producto
 	{
-		//public int prueba { get; set; }
 		public Producto(int idProducto, string nProducto, double precio)
 		{
 			IdProducto = idProducto;
