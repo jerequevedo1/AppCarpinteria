@@ -12,6 +12,8 @@ namespace WinFormCarpinteria.AccesoDatos
 {
 	class PresupuestoDao : IPresupuestoDao
 	{
+		//prueba
+		//codigo
 		public bool InsertarPresupuesto(Presupuesto oPresupuesto)
 		{
 			bool resultado = true;
