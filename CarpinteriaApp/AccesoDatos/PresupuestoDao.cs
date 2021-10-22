@@ -12,7 +12,6 @@ namespace WinFormCarpinteria.AccesoDatos
 {
 	class PresupuestoDao : IPresupuestoDao
 	{
-		//comentario
 		public bool InsertarPresupuesto(Presupuesto oPresupuesto)
 		{
 			bool resultado = true;
